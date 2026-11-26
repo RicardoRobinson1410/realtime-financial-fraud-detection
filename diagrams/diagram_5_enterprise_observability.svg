@@ -1,0 +1,172 @@
+<svg viewBox="0 0 1200 680" width="100%" height="680" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <filter id="shadow5" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <marker id="obArBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="obArGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+    <marker id="obArOrange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#fb923c"/>
+    </marker>
+    <marker id="obArPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="680" fill="url(#bgGrad5)" rx="12" />
+  <rect x="15" y="15" width="1170" height="650" fill="none" stroke="#334155" stroke-width="1.5" rx="10" />
+
+  <!-- Title -->
+  <text x="35" y="48" fill="#f8fafc" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Figure 5: Enterprise Observability &amp; Telemetry Correlation Architecture</text>
+  <text x="35" y="70" fill="#94a3b8" font-family="'Segoe UI', Roboto, sans-serif" font-size="12">Unified OpenTelemetry Pipeline, Cross-Pillar Correlation (Metrics -&gt; Exemplars -&gt; Traces -&gt; Logs) &amp; SLO Monitoring</text>
+
+  <!-- LAYER 1: Microservice Telemetry Sources (Top) -->
+  <rect x="35" y="95" width="1130" height="120" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.2" filter="url(#shadow5)"/>
+  <rect x="35" y="95" width="1130" height="26" rx="8" fill="#334155"/>
+  <text x="600" y="113" fill="#f1f5f9" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Instrumented Microservice Fleet (OpenTelemetry SDK | W3C TraceContext Injected into HTTP / gRPC / Kafka Record Headers)</text>
+
+  <!-- Service boxes across top -->
+  <rect x="50" y="130" width="165" height="70" rx="5" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="132" y="150" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Ingestion Gateway</text>
+  <text x="132" y="167" fill="#cbd5e1" font-family="monospace" font-size="8" text-anchor="middle">OTel Go SDK</text>
+  <text x="132" y="182" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Injects: traceparent</text>
+
+  <rect x="235" y="130" width="165" height="70" rx="5" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+  <text x="317" y="150" fill="#34d399" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Feature Aggregator</text>
+  <text x="317" y="167" fill="#cbd5e1" font-family="monospace" font-size="8" text-anchor="middle">OTel Java/Flink</text>
+  <text x="317" y="182" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Propagates Kafka Spans</text>
+
+  <rect x="420" y="130" width="165" height="70" rx="5" fill="#0f172a" stroke="#f87171" stroke-width="1"/>
+  <text x="502" y="150" fill="#f87171" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Scoring Engine</text>
+  <text x="502" y="167" fill="#cbd5e1" font-family="monospace" font-size="8" text-anchor="middle">OTel C++ / Python</text>
+  <text x="502" y="182" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Triton Inference Spans</text>
+
+  <rect x="605" y="130" width="165" height="70" rx="5" fill="#0f172a" stroke="#c084fc" stroke-width="1"/>
+  <text x="687" y="150" fill="#c084fc" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Case BFF Gateway</text>
+  <text x="687" y="167" fill="#cbd5e1" font-family="monospace" font-size="8" text-anchor="middle">OTel Node.js SDK</text>
+  <text x="687" y="182" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">WSS &amp; REST Traces</text>
+
+  <rect x="790" y="130" width="165" height="70" rx="5" fill="#0f172a" stroke="#e879f9" stroke-width="1"/>
+  <text x="872" y="150" fill="#e879f9" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Compliance &amp; Replay</text>
+  <text x="872" y="167" fill="#cbd5e1" font-family="monospace" font-size="8" text-anchor="middle">OTel Go / Spark</text>
+  <text x="872" y="182" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Iceberg Sink Audit Spans</text>
+
+  <rect x="975" y="130" width="175" height="70" rx="5" fill="#0f172a" stroke="#fb923c" stroke-width="1"/>
+  <text x="1062" y="150" fill="#fb923c" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Kafka &amp; Infra Mesh</text>
+  <text x="1062" y="167" fill="#cbd5e1" font-family="monospace" font-size="8" text-anchor="middle">JMX / Istio Envoy</text>
+  <text x="1062" y="182" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Broker Metrics &amp; Lag</text>
+
+  <!-- LAYER 2: OpenTelemetry Collector Pipeline (Center Top) -->
+  <rect x="35" y="240" width="1130" height="95" rx="8" fill="#0c1e33" stroke="#0284c7" stroke-width="1.5" filter="url(#shadow5)"/>
+  <text x="600" y="260" fill="#38bdf8" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">OpenTelemetry Collector Pipeline (DaemonSet on Kubernetes Nodes + Regional Collector Gateways)</text>
+
+  <!-- Connectors from Services down to Collector -->
+  <line x1="132" y1="200" x2="132" y2="238" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#obArBlue)"/>
+  <line x1="317" y1="200" x2="317" y2="238" stroke="#34d399" stroke-width="1.5" marker-end="url(#obArGreen)"/>
+  <line x1="502" y1="200" x2="502" y2="238" stroke="#f87171" stroke-width="1.5" marker-end="url(#obArOrange)"/>
+  <line x1="687" y1="200" x2="687" y2="238" stroke="#c084fc" stroke-width="1.5" marker-end="url(#obArPurple)"/>
+  <line x1="872" y1="200" x2="872" y2="238" stroke="#e879f9" stroke-width="1.5" marker-end="url(#obArPurple)"/>
+  <line x1="1062" y1="200" x2="1062" y2="238" stroke="#fb923c" stroke-width="1.5" marker-end="url(#obArOrange)"/>
+
+  <!-- Collector Internals -->
+  <rect x="50" y="275" width="240" height="45" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="170" y="295" fill="#38bdf8" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Receivers: OTLP gRPC / HTTP</text>
+  <text x="170" y="310" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Port 4317 / 4318, Zipkin, Prometheus</text>
+
+  <rect x="310" y="275" width="480" height="45" rx="4" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+  <text x="550" y="295" fill="#34d399" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Processors: Memory Limiter | Batching | PII Scrubbing (PAN / SSN Masking)</text>
+  <text x="550" y="310" fill="#cbd5e1" font-family="sans-serif" font-size="8" text-anchor="middle">Attribute Injection: env=prod, region=us-east-1, tenant_id=bank_core, k8s_pod</text>
+
+  <rect x="810" y="275" width="340" height="45" rx="4" fill="#1e293b" stroke="#fb923c" stroke-width="1"/>
+  <text x="980" y="295" fill="#fb923c" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Exporters: Fanout to 3 Pillars</text>
+  <text x="980" y="310" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Prometheus Remote Write | Tempo gRPC | Loki HTTP</text>
+
+  <!-- LAYER 3: The Three Specialized Telemetry Backends (Center Bottom) -->
+  <!-- Column 1: Metrics & SLOs (Prometheus) -->
+  <rect x="35" y="360" width="355" height="155" rx="8" fill="#1e293b" stroke="#34d399" stroke-width="1.5" filter="url(#shadow5)"/>
+  <rect x="35" y="360" width="355" height="26" rx="8" fill="#065f46"/>
+  <text x="212" y="378" fill="#d1fae5" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">PILLAR 1: Metrics TSDB (Prometheus / VictoriaMetrics)</text>
+  <text x="45" y="405" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Golden Signals: Latency, Traffic (1,000 TPS), Errors, Saturation</text>
+  <text x="45" y="422" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Kafka Consumer Lag &amp; Broker Disk IOPS</text>
+  <text x="45" y="439" fill="#34d399" font-family="sans-serif" font-size="8.5" font-weight="700">&#8226; SLO 1: P99 End-to-End Latency &lt; 45ms (Rolling 5m)</text>
+  <text x="45" y="456" fill="#34d399" font-family="sans-serif" font-size="8.5" font-weight="700">&#8226; SLO 2: Pipeline Error Rate &lt; 0.01% (99.99% Success)</text>
+  <rect x="45" y="468" width="335" height="36" rx="4" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+  <text x="212" y="482" fill="#a7f3d0" font-family="sans-serif" font-size="8.5" font-weight="700" text-anchor="middle">Exemplar Support: Attaches Trace ID directly</text>
+  <text x="212" y="496" fill="#a7f3d0" font-family="sans-serif" font-size="8" text-anchor="middle">to Histogram latency bucket data points</text>
+
+  <!-- Column 2: Distributed Tracing (Grafana Tempo) -->
+  <rect x="410" y="360" width="370" height="155" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow5)"/>
+  <rect x="410" y="360" width="370" height="26" rx="8" fill="#075985"/>
+  <text x="595" y="378" fill="#e0f2fe" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">PILLAR 2: Distributed Traces (Grafana Tempo / S3)</text>
+  <text x="420" y="405" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; End-to-End Trace Waterfall from Ingestion -&gt; Model -&gt; Alert</text>
+  <text x="420" y="422" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Captures Asynchronous Kafka Span Parent-Child Links</text>
+  <text x="420" y="439" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Cost-Effective Object Storage (S3) Backing (100% Sampling)</text>
+  <text x="420" y="456" fill="#38bdf8" font-family="sans-serif" font-size="8.5" font-weight="700">&#8226; Sub-second Trace Lookup by trace_id or transaction_id</text>
+  <rect x="420" y="468" width="350" height="36" rx="4" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+  <text x="595" y="482" fill="#bae6fd" font-family="sans-serif" font-size="8.5" font-weight="700" text-anchor="middle">W3C TraceContext: traceparent &amp; tracestate</text>
+  <text x="595" y="496" fill="#bae6fd" font-family="sans-serif" font-size="8" text-anchor="middle">Embedded in Kafka Record Headers for Zero Context Loss</text>
+
+  <!-- Column 3: Centralized Logs (Grafana Loki) -->
+  <rect x="800" y="360" width="365" height="155" rx="8" fill="#1e293b" stroke="#fb923c" stroke-width="1.5" filter="url(#shadow5)"/>
+  <rect x="800" y="360" width="365" height="26" rx="8" fill="#9a3412"/>
+  <text x="982" y="378" fill="#ffedd5" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">PILLAR 3: Centralized Logs (Grafana Loki)</text>
+  <text x="810" y="405" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Structured JSON logs with auto-injected metadata</text>
+  <text x="810" y="422" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Indexed by Labels: app, env, pod, level, error_code</text>
+  <text x="810" y="439" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; PII-Cleaned: Card numbers truncated to last 4 digits</text>
+  <text x="810" y="456" fill="#fb923c" font-family="sans-serif" font-size="8.5" font-weight="700">&#8226; High-throughput Ingestion (FluentBit DaemonSet)</text>
+  <rect x="810" y="468" width="345" height="36" rx="4" fill="#0f172a" stroke="#ea580c" stroke-width="1"/>
+  <text x="982" y="482" fill="#fed7aa" font-family="sans-serif" font-size="8.5" font-weight="700" text-anchor="middle">Auto-Correlation: trace_id &amp; span_id</text>
+  <text x="982" y="496" fill="#fed7aa" font-family="sans-serif" font-size="8" text-anchor="middle">Allows instant log filtering matching exact active trace span</text>
+
+  <!-- Connectors from Collector to 3 Pillars -->
+  <line x1="212" y1="335" x2="212" y2="358" stroke="#34d399" stroke-width="2" marker-end="url(#obArGreen)"/>
+  <line x1="595" y1="335" x2="595" y2="358" stroke="#38bdf8" stroke-width="2" marker-end="url(#obArBlue)"/>
+  <line x1="982" y1="335" x2="982" y2="358" stroke="#fb923c" stroke-width="2" marker-end="url(#obArOrange)"/>
+
+  <!-- LAYER 4: Unified Grafana Dashboard & Cross-Pillar Correlation Flow (Bottom) -->
+  <rect x="35" y="535" width="1130" height="120" rx="8" fill="#18182f" stroke="#c084fc" stroke-width="1.5" filter="url(#shadow5)"/>
+  <rect x="35" y="535" width="1130" height="26" rx="8" fill="#581c87"/>
+  <text x="600" y="553" fill="#f3e8ff" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Unified Observability Operations Console (Grafana Enterprise + Incident Correlation Workflow)</text>
+
+  <!-- Step 1: Metric Spike -->
+  <rect x="50" y="570" width="220" height="70" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1.2"/>
+  <text x="160" y="590" fill="#34d399" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Step 1: Metric Spike Alert</text>
+  <text x="60" y="608" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; P99 Latency reaches 52ms</text>
+  <text x="60" y="622" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Alertmanager fires P1 alert</text>
+
+  <!-- Arrow Step 1 -> 2 -->
+  <line x1="270" y1="605" x2="310" y2="605" stroke="#c084fc" stroke-width="2" marker-end="url(#obArPurple)"/>
+
+  <!-- Step 2: Exemplar Click -->
+  <rect x="320" y="570" width="240" height="70" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1.2"/>
+  <text x="440" y="590" fill="#c084fc" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Step 2: Exemplar Drilldown</text>
+  <text x="330" y="608" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Operator clicks outlier point on graph</text>
+  <text x="330" y="622" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Extracts exact trace_id: a81f4c...</text>
+
+  <!-- Arrow Step 2 -> 3 -->
+  <line x1="560" y1="605" x2="600" y2="605" stroke="#c084fc" stroke-width="2" marker-end="url(#obArPurple)"/>
+
+  <!-- Step 3: Tempo Trace Waterfall -->
+  <rect x="610" y="570" width="250" height="70" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+  <text x="735" y="590" fill="#38bdf8" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Step 3: Tempo Trace Waterfall</text>
+  <text x="620" y="608" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Visualizes span timing across all hops</text>
+  <text x="620" y="622" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Identifies 34ms hang in Triton inference</text>
+
+  <!-- Arrow Step 3 -> 4 -->
+  <line x1="860" y1="605" x2="900" y2="605" stroke="#c084fc" stroke-width="2" marker-end="url(#obArPurple)"/>
+
+  <!-- Step 4: Contextual Logs & Remediation -->
+  <rect x="910" y="570" width="240" height="70" rx="6" fill="#1e293b" stroke="#fb923c" stroke-width="1.2"/>
+  <text x="1030" y="590" fill="#fb923c" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Step 4: Filtered Loki Logs</text>
+  <text x="920" y="608" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; 1-Click: "Logs for this Span"</text>
+  <text x="920" y="622" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Root Cause: GPU CUDA worker lock</text>
+
+</svg>

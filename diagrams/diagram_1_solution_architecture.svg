@@ -1,0 +1,271 @@
+<svg viewBox="0 0 1200 780" width="100%" height="780" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="k8sGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1e38" />
+      <stop offset="100%" stop-color="#17172b" />
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#fb923c"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#f87171"/>
+    </marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="1200" height="780" fill="url(#bgGrad)" rx="12" />
+  <rect x="15" y="15" width="1170" height="750" fill="none" stroke="#334155" stroke-width="1.5" rx="10" />
+
+  <!-- Title Bar -->
+  <text x="35" y="48" fill="#f8fafc" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Figure 1: Solution Architecture Diagram (C4 Container View)</text>
+  <text x="35" y="70" fill="#94a3b8" font-family="'Segoe UI', Roboto, sans-serif" font-size="12">Cloud-Native, Real-Time Financial Fraud Detection Platform (Peak: 1,000 TPS | Latency P99 &lt; 45ms)</text>
+
+  <!-- REGION 1: External Rails & Ingress (Left) -->
+  <rect x="35" y="90" width="160" height="520" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="35" y="90" width="160" height="32" rx="8" fill="#334155" />
+  <text x="115" y="111" fill="#f1f5f9" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Payment Ingress Rails</text>
+
+  <!-- Card: Visa / MC / Swift -->
+  <rect x="45" y="135" width="140" height="65" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="115" y="158" fill="#e2e8f0" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Card Networks</text>
+  <text x="115" y="174" fill="#94a3b8" font-family="sans-serif" font-size="9" text-anchor="middle">Visa / MC / Amex</text>
+  <text x="115" y="188" fill="#38bdf8" font-family="monospace" font-size="9" text-anchor="middle">ISO 8583 / 20022</text>
+
+  <!-- Card: Real-time Rails (FedNow / SEPA) -->
+  <rect x="45" y="215" width="140" height="65" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="115" y="238" fill="#e2e8f0" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Instant Payments</text>
+  <text x="115" y="254" fill="#94a3b8" font-family="sans-serif" font-size="9" text-anchor="middle">FedNow / SEPA Instant</text>
+  <text x="115" y="268" fill="#38bdf8" font-family="monospace" font-size="9" text-anchor="middle">Sub-second Clearing</text>
+
+  <!-- Card: Core Banking System -->
+  <rect x="45" y="295" width="140" height="65" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="115" y="318" fill="#e2e8f0" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Core Banking System</text>
+  <text x="115" y="334" fill="#94a3b8" font-family="sans-serif" font-size="9" text-anchor="middle">DDA / Ledger / Accts</text>
+  <text x="115" y="348" fill="#38bdf8" font-family="monospace" font-size="9" text-anchor="middle">REST / gRPC TLS 1.3</text>
+
+  <!-- Card: Mobile & Online Banking -->
+  <rect x="45" y="375" width="140" height="65" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="115" y="398" fill="#e2e8f0" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Digital Channels</text>
+  <text x="115" y="414" fill="#94a3b8" font-family="sans-serif" font-size="9" text-anchor="middle">Mobile Apps / Web</text>
+  <text x="115" y="428" fill="#38bdf8" font-family="monospace" font-size="9" text-anchor="middle">OAuth2 / OIDC JWT</text>
+
+  <!-- Card: Edge Gateway & Tokenizer -->
+  <rect x="45" y="460" width="140" height="135" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5"/>
+  <text x="115" y="482" fill="#c7d2fe" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Edge API Gateway</text>
+  <text x="115" y="498" fill="#a5b4fc" font-family="sans-serif" font-size="9" text-anchor="middle">Envoy / Kong Ingress</text>
+  <line x1="55" y1="506" x2="175" y2="506" stroke="#4338ca" stroke-width="1" />
+  <text x="55" y="522" fill="#e0e7ff" font-family="sans-serif" font-size="9">&#8226; WAF &amp; DDoS Shield</text>
+  <text x="55" y="538" fill="#e0e7ff" font-family="sans-serif" font-size="9">&#8226; mTLS Termination</text>
+  <text x="55" y="554" fill="#e0e7ff" font-family="sans-serif" font-size="9">&#8226; Rate Limiter (Token Bkt)</text>
+  <text x="55" y="570" fill="#e0e7ff" font-family="sans-serif" font-size="9">&#8226; PAN Tokenizer (HSM)</text>
+
+  <!-- Connectors from Rails to Gateway -->
+  <path d="M 185 167 L 210 167 L 210 500 L 185 500" fill="none" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3" />
+  <path d="M 185 247 L 205 247 L 205 520 L 185 520" fill="none" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3" />
+  <path d="M 185 327 L 200 327 L 200 540 L 185 540" fill="none" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3" />
+
+  <!-- REGION 2: Kubernetes Service Mesh Platform (Center) -->
+  <rect x="225" y="90" width="670" height="520" rx="8" fill="url(#k8sGrad)" stroke="#6366f1" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="225" y="90" width="670" height="32" rx="8" fill="#312e81" />
+  <text x="560" y="111" fill="#e0e7ff" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Cloud-Native Microservices Mesh (Kubernetes EKS / GKE + Istio Service Mesh)</text>
+
+  <!-- Gateway to Ingestion Service Arrow -->
+  <line x1="185" y1="527" x2="245" y2="527" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="215" y="520" fill="#38bdf8" font-family="sans-serif" font-size="8" text-anchor="middle">HTTPS/gRPC</text>
+
+  <!-- Service 1: Ingestion Gateway Service -->
+  <rect x="245" y="475" width="160" height="105" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="325" y="497" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Ingestion Gateway Svc</text>
+  <text x="325" y="512" fill="#94a3b8" font-family="monospace" font-size="9" text-anchor="middle">Go 1.23 | KEDA Scaled</text>
+  <line x1="255" y1="520" x2="395" y2="520" stroke="#334155" stroke-width="1" />
+  <text x="255" y="535" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Schema Validate (Avro)</text>
+  <text x="255" y="549" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Idempotency Check</text>
+  <text x="255" y="563" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; W3C Trace Injection</text>
+
+  <!-- Central Apache Kafka Event Backbone -->
+  <rect x="245" y="325" width="630" height="120" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+  <rect x="245" y="325" width="630" height="26" rx="8" fill="#78350f" />
+  <text x="560" y="342" fill="#fef3c7" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Event Backbone: Apache Kafka Enterprise (32 Partitions / Topic | KRaft Quorum | 3-AZ Replicated)</text>
+
+  <!-- Kafka Topics visual boxes -->
+  <rect x="260" y="360" width="130" height="42" rx="4" fill="#1e293b" stroke="#fb923c" stroke-width="1"/>
+  <text x="325" y="377" fill="#fb923c" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle">trans.raw.v1</text>
+  <text x="325" y="392" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Key: account_id</text>
+
+  <rect x="410" y="360" width="145" height="42" rx="4" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+  <text x="482" y="377" fill="#34d399" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle">trans.enriched.v1</text>
+  <text x="482" y="392" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Features Attached</text>
+
+  <rect x="575" y="360" width="145" height="42" rx="4" fill="#1e293b" stroke="#f87171" stroke-width="1"/>
+  <text x="647" y="377" fill="#f87171" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle">fraud.evaluated.v1</text>
+  <text x="647" y="392" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Score &amp; Decision</text>
+
+  <rect x="740" y="360" width="120" height="42" rx="4" fill="#1e293b" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="800" y="377" fill="#ef4444" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle">fraud.alert.v1</text>
+  <text x="800" y="392" fill="#fca5a5" font-family="sans-serif" font-size="8" text-anchor="middle">Score &gt;= 0.75</text>
+
+  <text x="560" y="425" fill="#94a3b8" font-family="monospace" font-size="8" text-anchor="middle">Dead Letter Queues (DLQ): trans.raw.dlq | trans.enriched.dlq | fraud.eval.dlq (Poison Pill Quarantine)</text>
+
+  <!-- Ingestion produces to trans.raw.v1 -->
+  <line x1="325" y1="475" x2="325" y2="408" stroke="#fb923c" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <text x="335" y="445" fill="#fb923c" font-family="sans-serif" font-size="8">Publish Event</text>
+
+  <!-- Service 2: Feature Aggregation Service -->
+  <rect x="420" y="475" width="170" height="105" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1.5"/>
+  <text x="505" y="497" fill="#34d399" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Feature Aggregation Svc</text>
+  <text x="505" y="512" fill="#94a3b8" font-family="monospace" font-size="9" text-anchor="middle">Apache Flink / Streams</text>
+  <line x1="430" y1="520" x2="580" y2="520" stroke="#334155" stroke-width="1" />
+  <text x="430" y="535" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Velocity &amp; Frequency Windows</text>
+  <text x="430" y="549" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Geo-Distance Velocity Check</text>
+  <text x="430" y="563" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Historical Spending Deviation</text>
+
+  <!-- In-Memory Distributed Cache (Redis) -->
+  <rect x="420" y="620" width="170" height="55" rx="6" fill="#450a0a" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="505" y="642" fill="#fca5a5" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Redis Enterprise Cluster</text>
+  <text x="505" y="658" fill="#f87171" font-family="monospace" font-size="8.5" text-anchor="middle">L2 Feature Cache (&lt;1ms)</text>
+
+  <!-- Connectors for Feature Aggregator -->
+  <path d="M 370 405 L 370 460 L 450 460 L 450 475" fill="none" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrowOrange)"/>
+  <line x1="505" y1="580" x2="505" y2="614" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#arrowRed)"/>
+  <line x1="535" y1="475" x2="535" y2="408" stroke="#34d399" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="545" y="445" fill="#34d399" font-family="sans-serif" font-size="8">Publish Enriched</text>
+
+  <!-- Service 3: Fraud Scoring & ML Inference Engine -->
+  <rect x="620" y="475" width="180" height="105" rx="6" fill="#1e293b" stroke="#f87171" stroke-width="1.5"/>
+  <text x="710" y="497" fill="#f87171" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Fraud Scoring Engine</text>
+  <text x="710" y="512" fill="#94a3b8" font-family="monospace" font-size="9" text-anchor="middle">Triton Inference | &lt;15ms</text>
+  <line x1="630" y1="520" x2="790" y2="520" stroke="#334155" stroke-width="1" />
+  <text x="630" y="535" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Rule Engine (Sanctions, Lists)</text>
+  <text x="630" y="549" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; LightGBM / ONNX Ensemble</text>
+  <text x="630" y="563" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Deep Autoencoder Anomaly</text>
+
+  <!-- Connector from Enriched Topic to Scoring Engine -->
+  <line x1="647" y1="405" x2="647" y2="470" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <!-- Scoring Engine publishes Evaluated and Alert -->
+  <line x1="720" y1="475" x2="720" y2="408" stroke="#f87171" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <path d="M 770 475 L 770 430 L 810 430 L 810 408" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowRed)"/>
+
+  <!-- Service 4: Notification & Downstream Action Service -->
+  <rect x="245" y="145" width="180" height="100" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="335" y="167" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Downstream Action Svc</text>
+  <text x="335" y="182" fill="#94a3b8" font-family="monospace" font-size="9" text-anchor="middle">Java Quarkus / Reactive</text>
+  <line x1="255" y1="190" x2="415" y2="190" stroke="#334155" stroke-width="1" />
+  <text x="255" y="205" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Automated Card Lock</text>
+  <text x="255" y="219" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; 3DS Step-Up Challenge (SMS)</text>
+  <text x="255" y="233" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Core Rail Settlement Block</text>
+
+  <!-- Connector from Evaluated Topic to Downstream Action Svc -->
+  <path d="M 647 360 L 647 280 L 335 280 L 335 251" fill="none" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <!-- Service 5: Case Management & Analyst BFF Service -->
+  <rect x="680" y="145" width="200" height="150" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1.5"/>
+  <text x="780" y="167" fill="#c084fc" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Case Management &amp; BFF</text>
+  <text x="780" y="182" fill="#94a3b8" font-family="monospace" font-size="9" text-anchor="middle">Node.js 22 / Fastify</text>
+  <line x1="690" y1="190" x2="870" y2="190" stroke="#334155" stroke-width="1" />
+  <text x="690" y="205" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Alert Triage &amp; Queue Mgmt</text>
+  <text x="690" y="219" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; WebSocket Hub (STOMP/Push)</text>
+  <text x="690" y="233" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; SHAP Attribution Aggregation</text>
+  <text x="690" y="247" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; RBAC &amp; Audit Trail</text>
+  <rect x="690" y="258" width="180" height="28" rx="4" fill="#0f172a" stroke="#818cf8" stroke-width="1"/>
+  <text x="780" y="276" fill="#c7d2fe" font-family="sans-serif" font-size="9" text-anchor="middle">PostgreSQL Case Store (Multi-AZ)</text>
+
+  <!-- Connector from Alert Topic to Case Mgmt BFF -->
+  <path d="M 800 360 L 800 301" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowRed)"/>
+
+  <!-- REGION 3: Frontend & Analyst Console (Top Right) -->
+  <rect x="920" y="90" width="250" height="230" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="920" y="90" width="250" height="32" rx="8" fill="#0369a1" />
+  <text x="1045" y="111" fill="#f0f9ff" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Fraud Analyst Real-Time Console</text>
+
+  <rect x="935" y="135" width="220" height="170" rx="6" fill="#0f172a" stroke="#0ea5e9" stroke-width="1"/>
+  <text x="1045" y="155" fill="#e0f2fe" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">React 19 / Next.js SPA</text>
+  <text x="945" y="175" fill="#bae6fd" font-family="sans-serif" font-size="8.5">&#8226; WebSocket Live Alert Stream</text>
+  <text x="945" y="191" fill="#bae6fd" font-family="sans-serif" font-size="8.5">&#8226; DOM Virtualized Feed (10k items)</text>
+  <text x="945" y="207" fill="#bae6fd" font-family="sans-serif" font-size="8.5">&#8226; Explainable AI (SHAP Radar Chart)</text>
+  <text x="945" y="223" fill="#bae6fd" font-family="sans-serif" font-size="8.5">&#8226; 1-Click Freeze / Whitelist / Escalate</text>
+  <text x="945" y="239" fill="#bae6fd" font-family="sans-serif" font-size="8.5">&#8226; TanStack Query Optimistic Cache</text>
+  <text x="945" y="255" fill="#bae6fd" font-family="sans-serif" font-size="8.5">&#8226; Web Worker Background Filter</text>
+  <rect x="945" y="268" width="200" height="26" rx="4" fill="#0369a1" />
+  <text x="1045" y="285" fill="#ffffff" font-family="sans-serif" font-size="9" font-weight="700" text-anchor="middle">Analyst Response Time &lt; 2.5s</text>
+
+  <!-- BFF to Frontend WebSocket Arrow -->
+  <line x1="880" y1="215" x2="914" y2="215" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+  <text x="900" y="205" fill="#38bdf8" font-family="sans-serif" font-size="8" text-anchor="middle">WSS</text>
+
+  <!-- REGION 4: Compliance, Audit & Replay (Bottom Right) -->
+  <rect x="920" y="340" width="250" height="270" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="920" y="340" width="250" height="32" rx="8" fill="#6b21a8" />
+  <text x="1045" y="361" fill="#faf5ff" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Compliance, Audit &amp; Replay (CAR)</text>
+
+  <!-- Service 6: Compliance Replay Service -->
+  <rect x="935" y="385" width="220" height="95" rx="6" fill="#0f172a" stroke="#c084fc" stroke-width="1"/>
+  <text x="1045" y="405" fill="#f3e8ff" font-family="sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">Compliance &amp; Replay Engine</text>
+  <text x="945" y="425" fill="#e9d5ff" font-family="sans-serif" font-size="8.5">&#8226; Immutable Stream Archival</text>
+  <text x="945" y="440" fill="#e9d5ff" font-family="sans-serif" font-size="8.5">&#8226; BCBS 239 / Basel III Compliance</text>
+  <text x="945" y="455" fill="#e9d5ff" font-family="sans-serif" font-size="8.5">&#8226; Deterministic Replay Worker Pool</text>
+  <text x="945" y="470" fill="#e9d5ff" font-family="sans-serif" font-size="8.5">&#8226; Shadow Model Backtesting</text>
+
+  <!-- Immutable Storage (S3 Object Lock / WORM) -->
+  <rect x="935" y="495" width="220" height="100" rx="6" fill="#2e1065" stroke="#d8b4fe" stroke-width="1.5"/>
+  <text x="1045" y="517" fill="#f5d0fe" font-family="sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">WORM Compliance Lakehouse</text>
+  <text x="1045" y="533" fill="#e879f9" font-family="sans-serif" font-size="9" text-anchor="middle">AWS S3 / GCS Object Lock (7-Yr Retention)</text>
+  <line x1="945" y1="540" x2="1145" y2="540" stroke="#701a75" stroke-width="1" />
+  <text x="945" y="556" fill="#fdf4ff" font-family="sans-serif" font-size="8.5">&#8226; Apache Iceberg on Parquet (ZSTD)</text>
+  <text x="945" y="571" fill="#fdf4ff" font-family="sans-serif" font-size="8.5">&#8226; Bit-for-bit Deterministic Replay</text>
+  <text x="945" y="586" fill="#fdf4ff" font-family="sans-serif" font-size="8.5">&#8226; Hourly Reconciliation Checksums</text>
+
+  <!-- Connectors to Compliance -->
+  <path d="M 875 385 L 900 385 L 900 420 L 929 420" fill="none" stroke="#c084fc" stroke-width="1.5" marker-end="url(#arrowPurple)"/>
+  <line x1="1045" y1="480" x2="1045" y2="489" stroke="#d8b4fe" stroke-width="1.5" marker-end="url(#arrowPurple)"/>
+
+  <!-- REGION 5: Enterprise Observability & Telemetry (Bottom Full Strip) -->
+  <rect x="35" y="625" width="1135" height="135" rx="8" fill="#090d16" stroke="#0284c7" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="35" y="625" width="1135" height="26" rx="8" fill="#0369a1" />
+  <text x="600" y="642" fill="#f0f9ff" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Enterprise Unified Observability, Telemetry &amp; SLO Management Layer (OpenTelemetry Standard)</text>
+
+  <!-- Sub-components in Observability -->
+  <rect x="50" y="660" width="240" height="85" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="170" y="678" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Distributed Tracing (Tempo/Jaeger)</text>
+  <text x="60" y="696" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; W3C TraceContext Injected into Kafka</text>
+  <text x="60" y="711" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; End-to-end Span Propagation</text>
+  <text x="60" y="726" fill="#38bdf8" font-family="sans-serif" font-size="8" font-weight="700">&#8226; SLO: E2E P99 Latency &lt; 45ms</text>
+
+  <rect x="310" y="660" width="240" height="85" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+  <text x="430" y="678" fill="#34d399" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Metrics &amp; SLOs (Prometheus)</text>
+  <text x="320" y="696" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Transaction Throughput &amp; Error Rate</text>
+  <text x="320" y="711" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Kafka Consumer Lag &amp; Pod Saturation</text>
+  <text x="320" y="726" fill="#34d399" font-family="sans-serif" font-size="8" font-weight="700">&#8226; SLO: Pipeline Availability &gt;= 99.99%</text>
+
+  <rect x="570" y="660" width="240" height="85" rx="6" fill="#1e293b" stroke="#fb923c" stroke-width="1"/>
+  <text x="690" y="678" fill="#fb923c" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Centralized Logging (Loki)</text>
+  <text x="580" y="696" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; JSON Structured Logs with trace_id</text>
+  <text x="580" y="711" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; FluentBit Agent on K8s DaemonSets</text>
+  <text x="580" y="726" fill="#fb923c" font-family="sans-serif" font-size="8" font-weight="700">&#8226; PII &amp; PAN Data Masked at Ingress</text>
+
+  <rect x="830" y="660" width="325" height="85" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+  <text x="992" y="678" fill="#c084fc" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Cross-Pillar Correlation &amp; Grafana</text>
+  <text x="840" y="696" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Prometheus Exemplars link Metric Spike -&gt; Trace ID</text>
+  <text x="840" y="711" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Single Click Jump: Trace Waterfall -&gt; Microservice Logs</text>
+  <text x="840" y="726" fill="#c084fc" font-family="sans-serif" font-size="8" font-weight="700">&#8226; Automated PagerDuty &amp; Slack Alerting Integrations</text>
+
+</svg>

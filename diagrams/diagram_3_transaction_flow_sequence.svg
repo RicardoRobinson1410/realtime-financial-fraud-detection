@@ -1,0 +1,168 @@
+<svg viewBox="0 0 1200 800" width="100%" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <marker id="sqArBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="sqArGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+    <marker id="sqArRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#f87171"/>
+    </marker>
+    <marker id="sqArPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#bgGrad3)" rx="12" />
+  <rect x="15" y="15" width="1170" height="770" fill="none" stroke="#334155" stroke-width="1.5" rx="10" />
+
+  <!-- Title -->
+  <text x="35" y="46" fill="#f8fafc" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Figure 3: End-to-End Transaction Flow &amp; Classification Journey</text>
+  <text x="35" y="68" fill="#94a3b8" font-family="'Segoe UI', Roboto, sans-serif" font-size="12">Sequence Diagram: Ingestion, Streaming Feature Enrichment, Triton ML Scoring, Real-time Analyst Alerting, and WORM Audit</text>
+
+  <!-- Lifeline Columns (Headers) -->
+  <!-- 1. Client / Rail -->
+  <rect x="40" y="85" width="105" height="40" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="92" y="105" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Payment Rail</text>
+  <text x="92" y="118" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Visa / FedNow</text>
+  <line x1="92" y1="125" x2="92" y2="760" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 2. Gateway -->
+  <rect x="160" y="85" width="105" height="40" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="212" y="105" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">API Gateway</text>
+  <text x="212" y="118" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Envoy / WAF</text>
+  <line x1="212" y1="125" x2="212" y2="760" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 3. Ingestion Svc -->
+  <rect x="280" y="85" width="105" height="40" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="332" y="105" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Ingestion Svc</text>
+  <text x="332" y="118" fill="#94a3b8" font-family="monospace" font-size="8" text-anchor="middle">Go 1.23</text>
+  <line x1="332" y1="125" x2="332" y2="760" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 4. Kafka Event Backbone -->
+  <rect x="400" y="85" width="115" height="40" rx="6" fill="#78350f" stroke="#fb923c" stroke-width="1"/>
+  <text x="457" y="105" fill="#fef3c7" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Apache Kafka</text>
+  <text x="457" y="118" fill="#fed7aa" font-family="monospace" font-size="8" text-anchor="middle">Topics Backbone</text>
+  <line x1="457" y1="125" x2="457" y2="760" stroke="#78350f" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+  <!-- 5. Feature Agg & Redis -->
+  <rect x="530" y="85" width="115" height="40" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+  <text x="587" y="105" fill="#34d399" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Feature Aggregator</text>
+  <text x="587" y="118" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Flink + Redis L2</text>
+  <line x1="587" y1="125" x2="587" y2="760" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 6. Fraud Scoring Engine -->
+  <rect x="660" y="85" width="115" height="40" rx="6" fill="#1e293b" stroke="#f87171" stroke-width="1"/>
+  <text x="717" y="105" fill="#f87171" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Scoring Engine</text>
+  <text x="717" y="118" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Triton / XGBoost</text>
+  <line x1="717" y1="125" x2="717" y2="760" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 7. Case BFF -->
+  <rect x="790" y="85" width="105" height="40" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+  <text x="842" y="105" fill="#c084fc" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Case BFF Svc</text>
+  <text x="842" y="118" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Node.js + Postgres</text>
+  <line x1="842" y1="125" x2="842" y2="760" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 8. Analyst UI -->
+  <rect x="910" y="85" width="105" height="40" rx="6" fill="#0369a1" stroke="#38bdf8" stroke-width="1"/>
+  <text x="962" y="105" fill="#ffffff" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Analyst Console</text>
+  <text x="962" y="118" fill="#bae6fd" font-family="sans-serif" font-size="8" text-anchor="middle">React 19 / WSS</text>
+  <line x1="962" y1="125" x2="962" y2="760" stroke="#0369a1" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 9. Compliance S3 WORM -->
+  <rect x="1030" y="85" width="125" height="40" rx="6" fill="#4c1d95" stroke="#d8b4fe" stroke-width="1"/>
+  <text x="1092" y="105" fill="#f5d0fe" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Compliance WORM</text>
+  <text x="1092" y="118" fill="#e9d5ff" font-family="sans-serif" font-size="8" text-anchor="middle">S3 Object Lock</text>
+  <line x1="1092" y1="125" x2="1092" y2="760" stroke="#4c1d95" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- Sequence Steps -->
+
+  <!-- Step 1: Ingress POST -->
+  <line x1="92" y1="150" x2="210" y2="150" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#sqArBlue)"/>
+  <text x="151" y="143" fill="#e0f2fe" font-family="sans-serif" font-size="8.5" text-anchor="middle">1. POST /v1/trans (Auth, PAN, $5,400)</text>
+
+  <!-- Step 2: Gateway to Ingestion -->
+  <line x1="212" y1="175" x2="330" y2="175" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#sqArBlue)"/>
+  <text x="271" y="168" fill="#e0f2fe" font-family="sans-serif" font-size="8.5" text-anchor="middle">2. mTLS Validate &amp; Tokenize PAN</text>
+
+  <!-- Step 3: Ingestion publishes trans.raw.v1 -->
+  <line x1="332" y1="205" x2="455" y2="205" stroke="#fb923c" stroke-width="1.8" marker-end="url(#sqArBlue)"/>
+  <text x="393" y="198" fill="#fed7aa" font-family="sans-serif" font-size="8.5" text-anchor="middle">3. Produce trans.received.v1 (Key: Acct)</text>
+
+  <!-- Fast ACK to Payment Rail (Asynchronous Processing Path) -->
+  <line x1="332" y1="230" x2="214" y2="230" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#sqArBlue)"/>
+  <line x1="212" y1="235" x2="94" y2="235" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#sqArBlue)"/>
+  <text x="210" y="224" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">HTTP 202 Accepted (Async Deep Scoring Path &lt; 4ms)</text>
+
+  <!-- Step 4: Compliance captures raw event -->
+  <path d="M 457 245 L 490 245 L 490 260 L 1090 260" fill="none" stroke="#d8b4fe" stroke-width="1.2" stroke-dasharray="2,2" marker-end="url(#sqArPurple)"/>
+  <text x="770" y="254" fill="#e9d5ff" font-family="sans-serif" font-size="8" text-anchor="middle">4. WORM Audit Sink persists raw transaction to S3 Object Lock (Immutable 7-Yr Record)</text>
+
+  <!-- Step 5: Feature Aggregator consumes raw -->
+  <line x1="457" y1="285" x2="585" y2="285" stroke="#fb923c" stroke-width="1.5" marker-end="url(#sqArGreen)"/>
+  <text x="522" y="278" fill="#fed7aa" font-family="sans-serif" font-size="8.5" text-anchor="middle">5. Consume trans.received.v1</text>
+
+  <!-- Activation: Feature lookup in Redis -->
+  <rect x="582" y="295" width="10" height="40" fill="#34d399" rx="2"/>
+  <path d="M 592 305 C 625 305 625 325 594 325" fill="none" stroke="#34d399" stroke-width="1.2"/>
+  <text x="635" y="318" fill="#a7f3d0" font-family="sans-serif" font-size="8">L2 Redis Lookup (Velocity, Geo-Diff &lt; 2ms)</text>
+
+  <!-- Step 6: Produce trans.enriched.v1 -->
+  <line x1="587" y1="350" x2="459" y2="350" stroke="#34d399" stroke-width="1.8" marker-end="url(#sqArGreen)"/>
+  <text x="523" y="343" fill="#a7f3d0" font-family="sans-serif" font-size="8.5" text-anchor="middle">6. Produce trans.enriched.v1</text>
+
+  <!-- Step 7: Fraud Scoring Engine consumes enriched -->
+  <line x1="457" y1="380" x2="715" y2="380" stroke="#34d399" stroke-width="1.5" marker-end="url(#sqArRed)"/>
+  <text x="587" y="373" fill="#a7f3d0" font-family="sans-serif" font-size="8.5" text-anchor="middle">7. Consume trans.enriched.v1 (Partition-Aligned)</text>
+
+  <!-- Activation: Scoring Engine Inference -->
+  <rect x="712" y="390" width="10" height="55" fill="#f87171" rx="2"/>
+  <path d="M 722 400 C 765 400 765 435 724 435" fill="none" stroke="#f87171" stroke-width="1.2"/>
+  <text x="775" y="410" fill="#fca5a5" font-family="sans-serif" font-size="8">Triton Inference Server (LightGBM + DNN)</text>
+  <text x="775" y="423" fill="#fca5a5" font-family="sans-serif" font-size="8">Score: 0.94 (HIGH RISK) | SHAP Top: Foreign IP, $ Velocity</text>
+
+  <!-- Step 8: Produce fraud.evaluated.v1 & fraud.alert.v1 -->
+  <line x1="717" y1="460" x2="459" y2="460" stroke="#f87171" stroke-width="1.8" marker-end="url(#sqArRed)"/>
+  <text x="588" y="453" fill="#fca5a5" font-family="sans-serif" font-size="8.5" text-anchor="middle">8. Produce fraud.evaluated.v1 &amp; fraud.alert.v1 (Score &gt;= 0.75)</text>
+
+  <!-- Step 9: Downstream Action triggers automated card lock -->
+  <path d="M 457 480 L 150 480 L 150 505 L 94 505" fill="none" stroke="#f87171" stroke-width="1.5" marker-end="url(#sqArRed)"/>
+  <text x="270" y="497" fill="#fca5a5" font-family="sans-serif" font-size="8" text-anchor="middle">9. Automated Pre-Emptive Card Freeze &amp; SMS Challenge</text>
+
+  <!-- Step 10: Case BFF consumes fraud.alert.v1 -->
+  <line x1="457" y1="530" x2="840" y2="530" stroke="#ef4444" stroke-width="1.8" marker-end="url(#sqArPurple)"/>
+  <text x="650" y="523" fill="#fca5a5" font-family="sans-serif" font-size="8.5" text-anchor="middle">10. Consume fraud.alert.v1 (Insert Case into PostgreSQL)</text>
+
+  <!-- Step 11: BFF pushes alert to Analyst via WebSocket -->
+  <line x1="842" y1="560" x2="960" y2="560" stroke="#38bdf8" stroke-width="2" marker-end="url(#sqArBlue)"/>
+  <text x="901" y="552" fill="#38bdf8" font-family="sans-serif" font-size="8.5" font-weight="700" text-anchor="middle">11. WSS Push Alert (Frame: Latency &lt; 200ms)</text>
+
+  <!-- Step 12: Analyst UI renders alert -->
+  <rect x="957" y="570" width="10" height="60" fill="#0284c7" rx="2"/>
+  <text x="975" y="585" fill="#e0f2fe" font-family="sans-serif" font-size="8">Analyst Console: Highlight High-Risk Alert</text>
+  <text x="975" y="600" fill="#e0f2fe" font-family="sans-serif" font-size="8">SHAP Radar Chart + Geo-Discrepancy View</text>
+  <text x="975" y="615" fill="#fca5a5" font-family="sans-serif" font-size="8" font-weight="700">Analyst Clicks: [CONFIRM FRAUD &amp; BLOCK]</text>
+
+  <!-- Step 13: Analyst Action POST to BFF -->
+  <line x1="962" y1="640" x2="844" y2="640" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#sqArBlue)"/>
+  <text x="903" y="633" fill="#e0f2fe" font-family="sans-serif" font-size="8.5" text-anchor="middle">13. POST /v1/cases/1042/disposition (Confirmed)</text>
+
+  <!-- Step 14: BFF updates Case DB & Emits case.updated.v1 -->
+  <line x1="842" y1="670" x2="459" y2="670" stroke="#c084fc" stroke-width="1.8" marker-end="url(#sqArPurple)"/>
+  <text x="650" y="663" fill="#e9d5ff" font-family="sans-serif" font-size="8.5" text-anchor="middle">14. Produce case.updated.v1 (Analyst Disposition Logged)</text>
+
+  <!-- Step 15: Compliance archives complete case outcome -->
+  <path d="M 457 690 L 490 690 L 490 710 L 1090 710" fill="none" stroke="#d8b4fe" stroke-width="1.5" marker-end="url(#sqArPurple)"/>
+  <text x="770" y="703" fill="#e9d5ff" font-family="sans-serif" font-size="8" text-anchor="middle">15. Final Case Lifecycle Audit Manifest committed to WORM S3 (Full Audit Trail Complete)</text>
+
+  <!-- Latency Box Summary across bottom -->
+  <rect x="40" y="725" width="1120" height="40" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="600" y="742" fill="#38bdf8" font-family="sans-serif" font-size="9" font-weight="700" text-anchor="middle">LATENCY BUDGET RECONCILIATION (P99 TARGET: &lt; 45ms Scoring | &lt; 200ms Analyst Push)</text>
+  <text x="600" y="756" fill="#cbd5e1" font-family="sans-serif" font-size="8" text-anchor="middle">Ingress &amp; Tokenize: 4ms | Kafka Network Pub: 2ms | Flink Feature Window &amp; Redis: 6ms | Triton Ensemble ML: 12ms | Alert Pub &amp; WSS Push: 14ms | Total E2E: ~38ms</text>
+
+</svg>

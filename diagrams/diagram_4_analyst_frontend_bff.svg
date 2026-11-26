@@ -1,0 +1,137 @@
+<svg viewBox="0 0 1200 680" width="100%" height="680" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <filter id="shadow4" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <marker id="feArBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="feArPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#c084fc"/>
+    </marker>
+    <marker id="feArGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="680" fill="url(#bgGrad4)" rx="12" />
+  <rect x="15" y="15" width="1170" height="650" fill="none" stroke="#334155" stroke-width="1.5" rx="10" />
+
+  <!-- Title -->
+  <text x="35" y="48" fill="#f8fafc" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Figure 4: Fraud Analyst Console &amp; Backend-for-Frontend (BFF) Architecture</text>
+  <text x="35" y="70" fill="#94a3b8" font-family="'Segoe UI', Roboto, sans-serif" font-size="12">High-Frequency WebSocket Streaming, Virtualized DOM Recycling, Optimistic UI State &amp; Explainable AI (SHAP)</text>
+
+  <!-- SECTION 1: Client Browser Application (Left Half) -->
+  <rect x="35" y="95" width="530" height="550" rx="8" fill="#111827" stroke="#0ea5e9" stroke-width="1.5" filter="url(#shadow4)"/>
+  <rect x="35" y="95" width="530" height="32" rx="8" fill="#0284c7"/>
+  <text x="300" y="116" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Analyst Single Page Application (React 19 / Next.js 15)</text>
+
+  <!-- UI Sub-blocks -->
+  <!-- 1. Real-time WebSocket Client -->
+  <rect x="50" y="145" width="230" height="110" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="165" y="167" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">WebSocket / SSE Client</text>
+  <text x="60" y="187" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; STOMP over WSS Protocol</text>
+  <text x="60" y="202" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Heartbeat &amp; Exponential Reconnect</text>
+  <text x="60" y="217" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Priority Alert Multiplexing</text>
+  <text x="60" y="232" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Backpressure Throttle Buffer</text>
+
+  <!-- 2. TanStack Query & Zustand State -->
+  <rect x="300" y="145" width="245" height="110" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+  <text x="422" y="167" fill="#34d399" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">State Management &amp; Cache</text>
+  <text x="310" y="187" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; TanStack Query v5 (Server State)</text>
+  <text x="310" y="202" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Optimistic UI Updates on Action</text>
+  <text x="310" y="217" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Zustand Store (Active Filter / Selection)</text>
+  <text x="310" y="232" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; IndexedDB Persistence for Offline Drafts</text>
+
+  <!-- 3. Virtualized Alert Grid -->
+  <rect x="50" y="275" width="495" height="140" rx="6" fill="#1e293b" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="297" y="297" fill="#fb923c" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">DOM-Virtualized Alert Grid (TanStack Virtual)</text>
+  <rect x="65" y="310" width="465" height="24" rx="4" fill="#334155"/>
+  <text x="75" y="326" fill="#f8fafc" font-family="monospace" font-size="8.5">ALERT ID | TIMESTAMP | ACCOUNT | RISK | AMOUNT | STATUS | ACTION</text>
+  <rect x="65" y="338" width="465" height="20" rx="3" fill="#450a0a"/>
+  <text x="75" y="352" fill="#fca5a5" font-family="monospace" font-size="8">#ALT-9041 | 12:44:01.02 | AC-89104 | 0.94 | $5,400 | CRITICAL | [DISPATCH]</text>
+  <rect x="65" y="362" width="465" height="20" rx="3" fill="#1e293b"/>
+  <text x="75" y="376" fill="#fed7aa" font-family="monospace" font-size="8">#ALT-9040 | 12:43:58.89 | AC-11209 | 0.82 | $1,250 | HIGH     | [REVIEW]</text>
+  <text x="297" y="402" fill="#94a3b8" font-family="sans-serif" font-size="8.5" text-anchor="middle">Recycles 20 visible DOM elements from an in-memory queue of 15,000+ alerts (60 FPS scrolling)</text>
+
+  <!-- 4. Web Worker for Background Compute -->
+  <rect x="50" y="435" width="230" height="95" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+  <text x="165" y="455" fill="#c084fc" font-family="sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">Dedicated Web Worker</text>
+  <text x="60" y="475" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Client-side Fuzzy Search &amp; Filter</text>
+  <text x="60" y="490" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Risk Score Histogram Bucketing</text>
+  <text x="60" y="505" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Zero Main-Thread Jank / Freeze</text>
+
+  <!-- 5. Explainable AI & Action Bar -->
+  <rect x="300" y="435" width="245" height="95" rx="6" fill="#1e293b" stroke="#f87171" stroke-width="1"/>
+  <text x="422" y="455" fill="#f87171" font-family="sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">Explainability (SHAP) View</text>
+  <text x="310" y="475" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; SHAP Waterfall / Feature Radar</text>
+  <text x="310" y="490" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; IP Geolocation vs Previous 24h</text>
+  <text x="310" y="505" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; 1-Click Triage: [Freeze] [Whitelist]</text>
+
+  <!-- Client-side connectivity status -->
+  <rect x="50" y="550" width="495" height="35" rx="4" fill="#064e3b" stroke="#34d399" stroke-width="1"/>
+  <text x="297" y="572" fill="#a7f3d0" font-family="sans-serif" font-size="9" font-weight="700" text-anchor="middle">&#10003; WSS Connected: bff.internal.bank.com | Latency: 18ms | Active Channel: fraud-alerts-p1</text>
+
+  <!-- SECTION 2: Backend-for-Frontend (BFF) Gateway (Right Half) -->
+  <rect x="620" y="95" width="545" height="550" rx="8" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5" filter="url(#shadow4)"/>
+  <rect x="620" y="95" width="545" height="32" rx="8" fill="#4338ca"/>
+  <text x="892" y="116" fill="#e0e7ff" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Analyst BFF Gateway Tier (Node.js 22 / Fastify Cluster)</text>
+
+  <!-- BFF Sub-blocks -->
+  <!-- 1. WebSocket Gateway Hub -->
+  <rect x="640" y="145" width="240" height="110" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="760" y="167" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">WebSocket Connection Hub</text>
+  <text x="650" y="187" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Manages 500+ Concurrent Analysts</text>
+  <text x="650" y="202" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; STOMP Topic Subscriptions</text>
+  <text x="650" y="217" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Client Ping/Pong Heartbeats (10s)</text>
+  <text x="650" y="232" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Role-Based Topic Access Filter</text>
+
+  <!-- 2. Redis Pub/Sub Fanout -->
+  <rect x="905" y="145" width="240" height="110" rx="6" fill="#450a0a" stroke="#ef4444" stroke-width="1"/>
+  <text x="1025" y="167" fill="#fca5a5" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Redis Pub/Sub Fanout Hub</text>
+  <text x="915" y="187" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Synchronizes Horizontal BFF Pods</text>
+  <text x="915" y="202" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Broadcasts Alerts across all Nodes</text>
+  <text x="915" y="217" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Analyst Presence &amp; Active Locks</text>
+  <text x="915" y="232" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Sub-millisecond Relay Latency</text>
+
+  <!-- 3. Data Aggregator & ViewModel Transformer -->
+  <rect x="640" y="275" width="505" height="110" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1.2"/>
+  <text x="892" y="297" fill="#34d399" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Data Aggregation &amp; ViewModel Transformer</text>
+  <text x="655" y="320" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Merges Kafka Alert Event + PostgreSQL Case History + Customer CRM Dossier + Device Fingerprint</text>
+  <text x="655" y="337" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Eliminates Over-fetching: Serves tailored GraphQL / REST payloads strictly required by the UI view</text>
+  <text x="655" y="354" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Response Compression (Brotli / Gzip) &amp; ETag HTTP Caching for static reference datasets</text>
+  <text x="655" y="371" fill="#34d399" font-family="monospace" font-size="8">Saves 70% Bandwidth vs Raw Microservice Entity Exposure</text>
+
+  <!-- 4. Case Management Store & Kafka Link -->
+  <rect x="640" y="405" width="240" height="120" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+  <text x="760" y="425" fill="#c084fc" font-family="sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">Kafka Alert Consumer</text>
+  <text x="650" y="445" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Consumes: fraud.alert.v1</text>
+  <text x="650" y="460" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Deserializes Avro Payload</text>
+  <text x="650" y="475" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Publishes: case.updated.v1</text>
+  <text x="650" y="490" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Enforces Strict Idempotency</text>
+  <text x="650" y="505" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Emits Audit Metric Telemetry</text>
+
+  <!-- 5. PostgreSQL Case Database -->
+  <rect x="905" y="405" width="240" height="120" rx="6" fill="#1e293b" stroke="#818cf8" stroke-width="1"/>
+  <text x="1025" y="425" fill="#c7d2fe" font-family="sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">PostgreSQL Case Store</text>
+  <text x="915" y="445" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Case Entity &amp; State Machine</text>
+  <text x="915" y="460" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Analyst Notes &amp; Disposition Log</text>
+  <text x="915" y="475" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Multi-AZ Aurora Read Replicas</text>
+  <text x="915" y="490" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Partitioned by created_month</text>
+  <text x="915" y="505" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Connection Pooling (PgBouncer)</text>
+
+  <!-- Security & RBAC Footer -->
+  <rect x="640" y="550" width="505" height="35" rx="4" fill="#312e81" stroke="#818cf8" stroke-width="1"/>
+  <text x="892" y="572" fill="#e0e7ff" font-family="sans-serif" font-size="9" font-weight="700" text-anchor="middle">Zero-Trust RBAC: OIDC OAuth2 Token Validation | Analyst Session Audit Logged to SIEM</text>
+
+  <!-- Bidirectional Connection Between Client and BFF -->
+  <line x1="565" y1="200" x2="635" y2="200" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4,4" marker-end="url(#feArBlue)"/>
+  <line x1="635" y1="215" x2="565" y2="215" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4,4" marker-end="url(#feArBlue)"/>
+  <text x="600" y="190" fill="#38bdf8" font-family="sans-serif" font-size="8" text-anchor="middle">WSS / SSE</text>
+  <text x="600" y="235" fill="#34d399" font-family="sans-serif" font-size="8" text-anchor="middle">REST / GraphQL</text>
+
+</svg>

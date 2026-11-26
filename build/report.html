@@ -1,0 +1,2767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Solution Architecture Report: Real-Time Financial Fraud Detection Platform</title>
+  <style>
+    
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #3b82f6;
+      --secondary: #0f172a;
+      --accent-teal: #0d9488;
+      --accent-red: #dc2626;
+      --accent-purple: #7c3aed;
+      --accent-amber: #d97706;
+      --bg-light: #f8fafc;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text-main);
+      background-color: #ffffff;
+      line-height: 1.6;
+      font-size: 10pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @page {
+      size: letter;
+      margin: 16mm 14mm 16mm 14mm;
+      @bottom-right {
+        content: "Page " counter(page);
+        font-size: 8pt;
+        color: #94a3b8;
+      }
+      @bottom-left {
+        content: "CONFIDENTIAL — Real-Time Financial Fraud Detection Platform (SAR-FINFRAUD-2026)";
+        font-size: 8pt;
+        color: #94a3b8;
+      }
+    }
+
+    .report-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 10px 15px;
+    }
+
+    /* Cover Page */
+    .cover-page {
+      min-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 30px;
+      margin-bottom: 25px;
+    }
+
+    .cover-badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    .cover-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .badge-confidential {
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #f87171;
+    }
+
+    .badge-version {
+      background-color: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+    }
+
+    .cover-main {
+      margin: 40px 0;
+    }
+
+    .cover-pretitle {
+      font-size: 12pt;
+      font-weight: 600;
+      color: var(--accent-teal);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .cover-title {
+      font-size: 24pt;
+      font-weight: 800;
+      color: var(--secondary);
+      line-height: 1.25;
+      margin-bottom: 15px;
+    }
+
+    .cover-subtitle {
+      font-size: 12pt;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 30px;
+    }
+
+    .metadata-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: #f8fafc;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+
+    .metadata-table td {
+      padding: 8px 14px;
+      font-size: 9pt;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .metadata-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .metadata-table .meta-label {
+      font-weight: 700;
+      color: #475569;
+      width: 28%;
+    }
+
+    .metadata-table .meta-val {
+      color: #0f172a;
+    }
+
+    /* Table of Contents */
+    .toc-section {
+      page-break-after: always;
+      margin-bottom: 25px;
+      padding: 15px 0;
+    }
+
+    .toc-title {
+      font-size: 15pt;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 16px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 6px;
+    }
+
+    .toc-list {
+      list-style: none;
+    }
+
+    .toc-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dotted #cbd5e1;
+      font-size: 9.5pt;
+    }
+
+    .toc-item a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .toc-item a:hover {
+      color: var(--primary);
+    }
+
+    /* Headings & Sections */
+    .report-section {
+      margin-bottom: 30px;
+      page-break-after: auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 8px;
+      page-break-after: avoid;
+    }
+
+    .section-number {
+      font-size: 24pt;
+      font-weight: 800;
+      color: #cbd5e1;
+      line-height: 1;
+      margin-right: 12px;
+    }
+
+    .section-title-wrap h2 {
+      font-size: 15pt;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 3px;
+    }
+
+    .section-subtitle {
+      font-size: 9pt;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: 700;
+      color: var(--secondary);
+      margin: 18px 0 8px 0;
+      page-break-after: avoid;
+    }
+
+    h4 {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #334155;
+      margin: 14px 0 6px 0;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin-bottom: 10px;
+      text-align: justify;
+    }
+
+    .bullet-list {
+      margin: 8px 0 14px 20px;
+    }
+
+    .bullet-list li {
+      margin-bottom: 5px;
+    }
+
+    /* Callout Boxes */
+    .callout {
+      display: flex;
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin: 14px 0;
+      border-left: 4px solid;
+      background: #f8fafc;
+      page-break-inside: avoid;
+    }
+
+    .callout-icon {
+      font-size: 15pt;
+      margin-right: 12px;
+      line-height: 1.2;
+    }
+
+    .callout-body h4 {
+      margin-top: 0;
+      margin-bottom: 3px;
+    }
+
+    .callout-body p {
+      margin-bottom: 0;
+      font-size: 9pt;
+    }
+
+    .callout-danger {
+      border-color: var(--accent-red);
+      background-color: #fef2f2;
+    }
+    .callout-danger .callout-icon { color: var(--accent-red); }
+    .callout-danger h4 { color: #991b1b; }
+
+    .callout-info {
+      border-color: var(--primary-light);
+      background-color: #f0f9ff;
+    }
+    .callout-info .callout-icon { color: var(--primary-light); }
+    .callout-info h4 { color: #075985; }
+
+    .callout-success {
+      border-color: var(--accent-teal);
+      background-color: #f0fdfa;
+    }
+    .callout-success .callout-icon { color: var(--accent-teal); }
+    .callout-success h4 { color: #115e59; }
+
+    /* Tables */
+    .table-container {
+      margin: 14px 0;
+      overflow-x: auto;
+      page-break-inside: avoid;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8pt;
+      border: 1px solid #cbd5e1;
+    }
+
+    .data-table th {
+      background-color: #1e293b;
+      color: #ffffff;
+      text-align: left;
+      padding: 7px 9px;
+      font-weight: 700;
+      font-size: 8pt;
+      letter-spacing: 0.3px;
+    }
+
+    .data-table td {
+      padding: 7px 9px;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+
+    .data-table tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 7pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-primary { background: #e0e7ff; color: #3730a3; }
+    .badge-success { background: #d1fae5; color: #065f46; }
+    .badge-warning { background: #fef3c7; color: #92400e; }
+    .badge-danger { background: #fee2e2; color: #991b1b; }
+
+    /* Card Grids */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 14px 0;
+      page-break-inside: avoid;
+    }
+
+    .info-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .info-card .card-title {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .info-card p {
+      font-size: 8pt;
+      color: #334155;
+      margin-bottom: 0;
+    }
+
+    /* Microservices Grid */
+    .microservice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 14px 0;
+      page-break-inside: avoid;
+    }
+
+    .microservice-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .ms-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .ms-code {
+      display: inline-block;
+      padding: 3px 6px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 7.5pt;
+      font-weight: 800;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+
+    .ms-title-block h4 {
+      margin: 0;
+      font-size: 9.5pt;
+      font-weight: 700;
+    }
+
+    .ms-tech {
+      font-size: 7pt;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    .ms-desc {
+      font-size: 8pt;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .ms-io-box {
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 5px;
+      font-size: 7.5pt;
+      color: #475569;
+    }
+
+    .ms-io-box div {
+      margin-bottom: 2px;
+    }
+
+    /* SLO Cards */
+    .slo-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid var(--accent-teal);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+
+    .slo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .slo-title {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .slo-target {
+      font-size: 7.5pt;
+      font-weight: 800;
+      padding: 2px 7px;
+      background: #d1fae5;
+      color: #065f46;
+      border-radius: 4px;
+    }
+
+    .slo-body p {
+      font-size: 8.5pt;
+      margin-bottom: 5px;
+    }
+
+    .code-block-header {
+      font-size: 7pt;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 3px;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      font-size: 7.5pt;
+      overflow-x: auto;
+      margin-top: 3px;
+    }
+
+    code {
+      font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      font-size: 8pt;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+
+    /* Diagram Styling */
+    .diagram-wrapper {
+      margin: 20px 0;
+      page-break-inside: avoid;
+    }
+
+    .page-break-before {
+      page-break-before: always;
+    }
+
+    .diagram-container {
+      background: #0f172a;
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid #334155;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .diagram-container svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .diagram-caption {
+      font-size: 8pt;
+      color: #475569;
+      margin-top: 6px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .diagram-caption strong {
+      color: var(--primary);
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="report-container">
+    
+    <!-- COVER PAGE -->
+    <div class="cover-page">
+      <div class="cover-badge-row">
+        <span class="cover-badge badge-confidential">Confidential &mdash; Highly Restricted</span>
+        <span class="cover-badge badge-version">Document Version 1.0 &bull; Approved</span>
+      </div>
+
+      <div class="cover-main">
+        <div class="cover-pretitle">Enterprise Solution Architecture Report</div>
+        <h1 class="cover-title">Next-Generation Cloud-Native Real-Time Financial Fraud Detection Platform</h1>
+        <p class="cover-subtitle">
+          Architecture, Engineering &amp; Operationalization Blueprint for High-Volume, Low-Latency Transaction Classification, Deterministic WORM Audit Replayability &amp; Real-Time Operations Telemetry.
+        </p>
+
+        <table class="metadata-table">
+          <tr>
+            <td class="meta-label">Author &amp; Role</td>
+            <td class="meta-val">Principal Solutions Architect, Financial Services Cloud Architecture</td>
+          </tr>
+          <tr>
+            <td class="meta-label">Target Environment</td>
+            <td class="meta-val">Multi-Availability Zone Cloud-Native Infrastructure (AWS / Azure / GCP)</td>
+          </tr>
+          <tr>
+            <td class="meta-label">System Performance Baseline</td>
+            <td class="meta-val">1,000 Transactions/Sec (Peak) &bull; P99 Latency &le; 45ms &bull; 99.99% Reliability</td>
+          </tr>
+          <tr>
+            <td class="meta-label">Regulatory Mandates</td>
+            <td class="meta-val">BCBS 239, Basel III, PCI-DSS v4.0, GDPR Art. 22, FedNow &amp; SEPA Instant</td>
+          </tr>
+          <tr>
+            <td class="meta-label">Document Reference</td>
+            <td class="meta-val"><code>SAR-FINFRAUD-2026-V1.0</code></td>
+          </tr>
+          <tr>
+            <td class="meta-label">Date Ratified</td>
+            <td class="meta-val">November 3, 2026</td>
+          </tr>
+        </table>
+      </div>
+
+      <div style="font-size: 8pt; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+        &copy; 2026 Global Retail &amp; Commercial Banking Institution. All Rights Reserved. Enterprise Architecture &amp; Risk Governance Board.
+      </div>
+    </div>
+
+    <!-- TABLE OF CONTENTS -->
+    <div class="toc-section">
+      <h2 class="toc-title">Table of Contents</h2>
+      <ul class="toc-list">
+        <li class="toc-item"><a href="#section-1">1. Executive Summary &amp; Project Context</a> <span>03</span></li>
+        <li class="toc-item"><a href="#section-2">2. Functional Decomposition &amp; Core Microservices Architecture</a> <span>05</span></li>
+        <li class="toc-item"><a href="#section-3">3. Event-Driven Communication &amp; Messaging Backbone</a> <span>07</span></li>
+        <li class="toc-item"><a href="#section-4">4. Real-Time Analyst Frontend &amp; BFF Architecture</a> <span>09</span></li>
+        <li class="toc-item"><a href="#section-5">5. Enterprise Observability &amp; Telemetry Framework</a> <span>11</span></li>
+        <li class="toc-item"><a href="#section-6">6. Scalability &amp; Resilience Engineering</a> <span>12</span></li>
+        <li class="toc-item"><a href="#section-7">7. Architectural Patterns Evaluation &amp; Cost-Benefit Analysis</a> <span>15</span></li>
+        <li class="toc-item"><a href="#section-8">8. Proposed Technology Stack &amp; Justifications</a> <span>16</span></li>
+        <li class="toc-item"><a href="#section-9">9. Critical Evaluation &amp; Financial Services Trade-Offs</a> <span>17</span></li>
+        <li class="toc-item"><a href="#section-10">10. Standout Production Strategies: Deployment &amp; Extreme Load</a> <span>18</span></li>
+        <li class="toc-item"><a href="#section-11">11. Architecture Diagrams Gallery &amp; Visual Walkthrough</a> <span>19</span></li>
+        <li class="toc-item"><a href="#section-12">12. Implementation Roadmap, Migration Strategy &amp; Conclusion</a> <span>26</span></li>
+      </ul>
+    </div>
+
+    <!-- MAIN BODY SECTIONS -->
+    
+<section id="section-1" class="report-section">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <div class="section-title-wrap">
+      <h2>Executive Summary &amp; Project Context</h2>
+      <p class="section-subtitle">Business challenges, regulatory imperatives, technical problem decomposition, and guiding principles.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-danger">
+    <div class="callout-icon">&#9888;</div>
+    <div class="callout-body">
+      <h4>Urgent Regulatory Mandate</h4>
+      <p>Impending instant payment mandates (FedNow, SEPA Instant, and UK PSR mandatory reimbursement rules) legally obligate financial institutions to detect and intercept fraudulent transactions in real time before funds settle. Failing to replace the legacy batch platform exposes the institution to tens of millions of dollars in unrecoverable liability and regulatory capital sanctions.</p>
+    </div>
+  </div>
+
+  <h3>1.1 The Business Challenge &amp; Regulatory Imperative</h3>
+  <p>For over a decade, the financial institution relied on a monolithic, batch-oriented fraud detection engine. Designed in an era of multi-day clearing cycles, this legacy platform processed transaction logs during overnight batch processing windows (T+1 to T+3). While the institution has successfully migrated and uplifted the vast majority of its core retail and commercial banking services to a cloud-native topology, this legacy fraud system remained a critical vulnerability and the single largest operational laggard in the bank's architecture.</p>
+
+  <p>The batch paradigm imposes severe business liabilities and existential regulatory risks:</p>
+  <ul class="bullet-list">
+    <li><strong>Capital Slippage &amp; Unrecoverable Losses:</strong> Fraudulent transactions (such as account takeovers, credential stuffing, authorized push payment fraud, and synthetic identity card rings) are identified hours or days after funds have cleared and exited the banking rail. By the time an analyst reviews an overnight batch report, funds have been laundered across multiple crypto off-ramps or offshore accounts, resulting in tens of millions of dollars in net annual charge-off losses.</li>
+    <li><strong>Impending Legal &amp; Regulatory Compliance Mandates:</strong> Financial regulators globally have mandated real-time fraud monitoring. In the United States, the Federal Reserve's <strong>FedNow</strong> instant clearing network and the Clearing House's Real-Time Payments (RTP) require immediate transaction validation. In the European Union, the <strong>Instant Payments Regulation (IPR)</strong> mandates 24/7 instant euro transfers within 10 seconds, coupled with mandatory Verification of Payee (VoP). In the United Kingdom, the <strong>Payment Systems Regulator (PSR)</strong> rules enforce mandatory 50:50 reimbursement of Authorized Push Payment (APP) fraud by sending and receiving banks within five business days, radically shifting fraud liability directly onto the balance sheet of the institution.</li>
+    <li><strong>Basel Committee on Banking Supervision (BCBS 239) &amp; Basel III Operational Risk:</strong> Global regulatory bodies require institutions to maintain absolute risk data aggregation capabilities, immutable transaction provenance, and deterministic audit replayability for a minimum of seven years. Failing to provide bit-for-bit replay of historical transactions through the exact decisioning pipeline during a regulatory audit incurs severe administrative sanctions and increased capital reserve requirements.</li>
+  </ul>
+
+  <h3>1.2 System Requirements &amp; Technical Problem Decomposition</h3>
+  <p>The core mandate is to translate high-level business drivers into rigorous, measurable engineering objectives:</p>
+
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Business / Regulatory Requirement</th>
+          <th style="width: 35%;">Technical Challenge</th>
+          <th style="width: 40%;">Architectural Objective &amp; Target SLA/SLO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Real-Time Transaction Analysis</strong></td>
+          <td>Synchronous or near-real-time scoring before funds settle or exit the rail.</td>
+          <td>Sub-100ms total round-trip latency. Internal fraud scoring engine execution budget: <span class="badge badge-success">P99 &le; 45ms</span> at the 99th percentile.</td>
+        </tr>
+        <tr>
+          <td><strong>Immutable Audit &amp; Replayability</strong></td>
+          <td>Basel III / BCBS 239 legal compliance requiring exact historical reconstruction.</td>
+          <td><span class="badge badge-primary">100% WORM</span> event capture in object storage. Deterministic replay pipeline capable of replaying any historical time-slice without corrupting production state.</td>
+        </tr>
+        <tr>
+          <td><strong>Peak Volume Throughput</strong></td>
+          <td>Daily transaction peaks during business hours, Black Friday, and payroll dates.</td>
+          <td><span class="badge badge-warning">1,000 TPS</span> sustained baseline peak throughput, with architecture engineered for burst headroom up to 3,000 TPS.</td>
+        </tr>
+        <tr>
+          <td><strong>Elastic Cost-Effective Scaling</strong></td>
+          <td>Preventing 24/7 provisioning of peak hardware while absorbing sudden surges.</td>
+          <td><strong>Dynamic Horizontal Autoscaling (KEDA)</strong> driven by Kafka topic lag and CPU/memory pressure. Dynamic range from 100 TPS (night trough) to 1,000+ TPS peak.</td>
+        </tr>
+        <tr>
+          <td><strong>Real-Time Analyst Operations Console</strong></td>
+          <td>Operations team needs immediate visibility into high-confidence fraud.</td>
+          <td><strong>Sub-second push alerting (&lt; 200ms)</strong> via WebSocket/Server-Sent Events to a virtualized React frontend, complete with Explainable AI (SHAP) feature attributions.</td>
+        </tr>
+        <tr>
+          <td><strong>Enterprise Observability &amp; Operability</strong></td>
+          <td>Proactive failure detection, compliance reporting, and zero unmonitored blindspots.</td>
+          <td><strong>OpenTelemetry-native telemetry</strong>, Prometheus metrics, Grafana Tempo distributed tracing, Loki structured logging, and formal SLOs with error budget alerting.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>1.3 Architectural Vision &amp; Guiding Principles</h3>
+  <p>To satisfy these strict non-functional requirements without compromising security or resilience, the target architecture adheres to five foundational principles:</p>
+  <div class="card-grid">
+    <div class="info-card">
+      <div class="card-title">1. Event-Driven Choreography</div>
+      <p>Components communicate asynchronously via an event backbone (Apache Kafka), buffering unpredictable payment traffic, isolating failures, and eliminating cascading outages.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">2. Dual-Track Evaluation</div>
+      <p>A high-speed synchronous gRPC path (&lt; 35ms) serves inline payment authorization blocking, while an asynchronous stream pipeline computes complex rolling graph features.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">3. Immutability by Design</div>
+      <p>Every transaction, feature snapshot, and decision is modeled as an immutable event persisted to WORM storage for 7-year regulatory determinism.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">4. Zero-Trust Security &amp; Tokenization</div>
+      <p>Strict mTLS 1.3 across the mesh. PAN and PII are tokenized at the edge ingress boundary so analytical engines never handle plain financial credentials.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="section-2" class="report-section">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <div class="section-title-wrap">
+      <h2>Functional Decomposition &amp; Core Microservices Architecture</h2>
+      <p class="section-subtitle">Domain boundaries, responsibilities, input/output schemas, triggers, and coupling analysis.</p>
+    </div>
+  </div>
+
+  <h3>2.1 Bounded Contexts &amp; Functional Decomposition</h3>
+  <p>In accordance with Domain-Driven Design (DDD) principles, the fraud detection problem domain is partitioned into distinct, loosely coupled bounded contexts. Monolithic architectures fail at high throughput because stateful feature accumulation, GPU-intensive machine learning inference, high-frequency human analyst querying, and regulatory archival compete for identical memory, CPU, and thread pool resources.</p>
+  <p>By decoupling these workloads into six specialized microservices, each service scales independently according to its compute and I/O characteristics:</p>
+
+  <div class="microservice-grid">
+    <!-- Service 1 -->
+    <div class="microservice-card">
+      <div class="ms-header">
+        <span class="ms-code">IGS</span>
+        <div class="ms-title-block">
+          <h4>1. Ingestion Gateway Service</h4>
+          <span class="ms-tech">Go 1.23 | KEDA Scaled</span>
+        </div>
+      </div>
+      <p class="ms-desc">Perimeter ingress, mTLS termination, schema validation, rate-limiting, HSM PAN tokenization, W3C trace injection, and idempotent raw event publishing.</p>
+      <div class="ms-io-box">
+        <div><strong>Inputs:</strong> Synchronous HTTPS / gRPC POST (ISO 8583 / ISO 20022 / JSON).</div>
+        <div><strong>Outputs:</strong> <code>financial.trans.received.v1</code> event to Kafka; HTTP 202 Accepted.</div>
+        <div><strong>Trigger:</strong> External payment network API or digital banking rail.</div>
+      </div>
+    </div>
+
+    <!-- Service 2 -->
+    <div class="microservice-card">
+      <div class="ms-header">
+        <span class="ms-code" style="background:#059669;">FAS</span>
+        <div class="ms-title-block">
+          <h4>2. Feature Aggregation Service</h4>
+          <span class="ms-tech">Apache Flink / Kafka Streams | Redis L2</span>
+        </div>
+      </div>
+      <p class="ms-desc">Real-time stateful stream processing computing velocity sliding windows (5m, 1h, 24h), geographic impossible travel distance, and spending deviations.</p>
+      <div class="ms-io-box">
+        <div><strong>Inputs:</strong> Consumes <code>financial.trans.received.v1</code> from Kafka; reads/writes Redis.</div>
+        <div><strong>Outputs:</strong> Emits <code>financial.trans.enriched.v1</code> with 48-dim feature vector.</div>
+        <div><strong>Trigger:</strong> Message arrival on raw transaction topic.</div>
+      </div>
+    </div>
+
+    <!-- Service 3 -->
+    <div class="microservice-card">
+      <div class="ms-header">
+        <span class="ms-code" style="background:#dc2626;">FSE</span>
+        <div class="ms-title-block">
+          <h4>3. Fraud Scoring Engine</h4>
+          <span class="ms-tech">Triton Inference | LightGBM + Autoencoder</span>
+        </div>
+      </div>
+      <p class="ms-desc">Dual-stage evaluation: Deterministic rules (sanctions, blacklists) + Triton ML ensemble. Generates risk probability score and TreeSHAP explainability attributions in &lt;15ms.</p>
+      <div class="ms-io-box">
+        <div><strong>Inputs:</strong> Consumes <code>financial.trans.enriched.v1</code> from Kafka.</div>
+        <div><strong>Outputs:</strong> Emits <code>financial.fraud.evaluated.v1</code> and <code>financial.fraud.alert.v1</code>.</div>
+        <div><strong>Trigger:</strong> Message arrival on enriched transaction topic.</div>
+      </div>
+    </div>
+
+    <!-- Service 4 -->
+    <div class="microservice-card">
+      <div class="ms-header">
+        <span class="ms-code" style="background:#7c3aed;">CMS</span>
+        <div class="ms-title-block">
+          <h4>4. Case Management &amp; BFF</h4>
+          <span class="ms-tech">Node.js 22 Fastify | PostgreSQL Aurora</span>
+        </div>
+      </div>
+      <p class="ms-desc">Backend-for-Frontend (BFF) orchestrating alert lifecycle, case state machine, analyst assignments, and real-time push streaming over WebSockets (WSS/STOMP) to analyst UI.</p>
+      <div class="ms-io-box">
+        <div><strong>Inputs:</strong> Consumes <code>financial.fraud.alert.v1</code>; WebSocket &amp; REST analyst requests.</div>
+        <div><strong>Outputs:</strong> Real-time WSS frames; Case DB updates; emits <code>case.events.v1</code>.</div>
+        <div><strong>Trigger:</strong> Fraud alert event or analyst web interaction.</div>
+      </div>
+    </div>
+
+    <!-- Service 5 -->
+    <div class="microservice-card">
+      <div class="ms-header">
+        <span class="ms-code" style="background:#9333ea;">CAR</span>
+        <div class="ms-title-block">
+          <h4>5. Compliance, Audit &amp; Replay</h4>
+          <span class="ms-tech">Go / Spark | S3 Object Lock WORM</span>
+        </div>
+      </div>
+      <p class="ms-desc">Immutable WORM archiving of all streams to S3 Object Lock in Compliance Mode (7-year retention). Manages deterministic historical replay into isolated shadow topics.</p>
+      <div class="ms-io-box">
+        <div><strong>Inputs:</strong> Consumes all domain Kafka topics; Admin Replay API triggers.</div>
+        <div><strong>Outputs:</strong> Parquet/Iceberg datasets; publishes to <code>compliance.trans.replay.v1</code>.</div>
+        <div><strong>Trigger:</strong> Continuous stream consumption; Admin API invocation.</div>
+      </div>
+    </div>
+
+    <!-- Service 6 -->
+    <div class="microservice-card">
+      <div class="ms-header">
+        <span class="ms-code" style="background:#0284c7;">NDS</span>
+        <div class="ms-title-block">
+          <h4>6. Downstream Action Service</h4>
+          <span class="ms-tech">Java Quarkus Reactive | Core Banking gRPC</span>
+        </div>
+      </div>
+      <p class="ms-desc">Executes automated enforcement actions: Pre-emptive card freeze via Card Processor, settlement suspense hold on Core Banking, and 3DS push challenge dispatch to cardholders.</p>
+      <div class="ms-io-box">
+        <div><strong>Inputs:</strong> Consumes <code>financial.fraud.evaluated.v1</code> and <code>case.events.v1</code>.</div>
+        <div><strong>Outputs:</strong> gRPC / Webhook calls to Core Banking, Card Issuer APIs, Twilio.</div>
+        <div><strong>Trigger:</strong> High-risk score evaluation or confirmed analyst disposition.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>2.2 Inter-Service Coupling &amp; Communication Analysis</h3>
+  <p>Architectural coupling directly influences system availability, latency, and operational risk in a financial ecosystem. The table below analyzes the coupling dimensions across the platform:</p>
+
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Coupling Dimension</th>
+          <th style="width: 45%;">Platform Characteristic &amp; Mitigation</th>
+          <th style="width: 30%;">Architectural Assessment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Afferent vs. Efferent Coupling</strong></td>
+          <td>Core domain services (FSE, FAS) have low efferent coupling (they only depend on Kafka and local/cache state). Ingestion Gateway has high afferent coupling (perimeter entry) but zero direct downstream service dependencies.</td>
+          <td><span class="badge badge-success">Fault Isolation:</span> Failures in Case Management or Triton ML cannot cascade upstream to crash Ingestion.</td>
+        </tr>
+        <tr>
+          <td><strong>Temporal Coupling</strong></td>
+          <td>With the exception of the optional synchronous payment gate, all inter-service communication is asynchronous via Kafka log persistence.</td>
+          <td><span class="badge badge-success">Zero Temporal Coupling:</span> Ingestion acknowledges payments even if downstream consumers are undergoing rolling restarts.</td>
+        </tr>
+        <tr>
+          <td><strong>Schema Coupling</strong></td>
+          <td>Microservices exchange strictly versioned binary Avro records validated by an enterprise Schema Registry (Confluent / Karapace). Schema evolution rules enforce backward and forward compatibility (Full Transitive Compatibility).</td>
+          <td><span class="badge badge-primary">Managed Evolution:</span> Fields can be added with default values without breaking upstream producers or downstream consumers.</td>
+        </tr>
+        <tr>
+          <td><strong>Deployment Coupling</strong></td>
+          <td>Each microservice is packaged as an independent container, deployed via GitOps (ArgoCD), and managed under its own CI/CD pipeline and semantic versioning tag.</td>
+          <td><span class="badge badge-success">Zero Deployment Coupling:</span> ML scoring models or frontend BFF services deploy independently without coordination.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<section id="section-3" class="report-section">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <div class="section-title-wrap">
+      <h2>Event-Driven Communication &amp; Messaging Backbone</h2>
+      <p class="section-subtitle">Choreography rationale, Kafka topic topology, event taxonomy, canonical schemas, and synchronous deviations.</p>
+    </div>
+  </div>
+
+  <h3>3.1 Event-Driven Paradigm Rationale</h3>
+  <p>In high-volume financial architectures processing 1,000+ transactions per second, point-to-point synchronous HTTP/REST communication across internal microservices is fundamentally unviable. Synchronous chaining introduces compounding latency, cascading thread pool starvation, and vulnerable failure domains where a degraded downstream case database can block transaction ingress.</p>
+  <p>The system utilizes an <strong>Event-Driven Choreography</strong> pattern built on <strong>Apache Kafka</strong>. By decoupling producers from consumers via a partitioned, immutable distributed commit log, the architecture achieves:</p>
+  <ul class="bullet-list">
+    <li><strong>Traffic Smoothing &amp; Backpressure Absorption:</strong> Payment bursts (surging to 2,500+ TPS on Black Friday or payroll cycles) are safely absorbed in Kafka partition buffers without dropping transactions. Downstream consumers pull records at their optimal sustained capacity.</li>
+    <li><strong>Replayability &amp; Event Sourcing:</strong> Because transactions are immutable events preserved in Kafka's distributed log (and cold-archived in WORM object storage), any downstream microservice can rebuild its local state, recover from catastrophic database corruption, or re-process historical traffic simply by rewinding its consumer group offset.</li>
+    <li><strong>Partition Key Ordering:</strong> By partitioning topics by <code>account_id</code> or <code>cardholder_token</code>, all events for a given bank account arrive sequentially at the exact same partition. This guarantees strict causal ordering for velocity and state calculations without requiring expensive distributed locks.</li>
+  </ul>
+
+  <h3>3.2 Canonical Event Catalog &amp; Taxonomy</h3>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 22%;">Event Name &amp; Topic</th>
+          <th style="width: 25%;">What &amp; When?</th>
+          <th style="width: 25%;">Why? (Business Purpose)</th>
+          <th style="width: 14%;">Publisher</th>
+          <th style="width: 14%;">Consumer(s)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>TransactionReceivedEvent</strong><br><code>financial.trans.received.v1</code></td>
+          <td>Raw transaction ingress record with tokenized PAN. Emitted immediately upon edge validation.</td>
+          <td>Decouples network ingress from downstream stateful enrichment and initiates the audit trail.</td>
+          <td><span class="badge badge-primary">Ingestion Gateway</span></td>
+          <td>Feature Aggregator,<br>Compliance Archiver</td>
+        </tr>
+        <tr>
+          <td><strong>TransactionEnrichedEvent</strong><br><code>financial.trans.enriched.v1</code></td>
+          <td>Transaction merged with 48-dim temporal and spatial feature vector after Flink processing.</td>
+          <td>Provides the Scoring Engine with full behavioral context without redundant DB queries.</td>
+          <td><span class="badge badge-success">Feature Aggregator</span></td>
+          <td>Fraud Scoring Engine,<br>Compliance Archiver</td>
+        </tr>
+        <tr>
+          <td><strong>FraudEvaluatedEvent</strong><br><code>financial.fraud.evaluated.v1</code></td>
+          <td>Scoring verdict (ALLOW/CHALLENGE/BLOCK), score [0.0-1.0], and top SHAP attributions.</td>
+          <td>Records classification decision for all transactions, feeding automated enforcement and BI.</td>
+          <td><span class="badge badge-danger">Scoring Engine</span></td>
+          <td>Downstream Action Svc,<br>Compliance Archiver</td>
+        </tr>
+        <tr>
+          <td><strong>FraudAlertRaisedEvent</strong><br><code>financial.fraud.alert.v1</code></td>
+          <td>High-confidence fraud alert packet (Score &ge; 0.75) with triage priority metadata.</td>
+          <td>Routes high-risk transactions directly to human fraud analysts for immediate real-time review.</td>
+          <td><span class="badge badge-danger">Scoring Engine</span></td>
+          <td>Case Management BFF,<br>Ops Alert Hub</td>
+        </tr>
+        <tr>
+          <td><strong>CaseStatusChangedEvent</strong><br><code>case.events.v1</code></td>
+          <td>Case lifecycle transition (ASSIGNED, CONFIRMED, FALSE_POS) with analyst notes.</td>
+          <td>Triggers permanent card blocking, updates ML training ground-truth, and writes analyst audit log.</td>
+          <td><span class="badge badge-primary" style="background:#7c3aed;">Case Mgmt BFF</span></td>
+          <td>Downstream Action Svc,<br>ML Training Store</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>3.3 Kafka Consumer Offset Management &amp; Exactly-Once Scaling</h3>
+  <p>A fundamental challenge in event-driven financial architectures is ensuring that when microservice consumer groups scale horizontally (e.g., expanding from 4 pods to 16 or 32 pods during a transaction surge), message consumption and state transitions remain strictly <strong>Exactly-Once</strong>.</p>
+  
+  <div class="card-grid">
+    <div class="info-card">
+      <div class="card-title">1. Cooperative Sticky Assignor</div>
+      <p>Using <code>CooperativeStickyAssignor</code>, scaling pods triggers incremental rebalancing. Only the specific partitions migrating to the new pod are revoked; all unaffected consumers continue processing with zero stop-the-world pauses.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">2. Consumer Rebalance Listener</div>
+      <p><code>onPartitionsRevoked()</code> halts polling, drains in-flight records from memory, executes a synchronous offset flush (<code>commitSync</code>), and flushes local state before yielding partition ownership.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">3. Exactly-Once Stream Hops (EOS)</div>
+      <p>Stream hops (Feature Aggregator, Scoring Engine) use Kafka Transactions. Consumer offsets are committed <em>inside</em> the transaction via <code>sendOffsetsToTransaction()</code>, aborting cleanly on crash with broker zombie fencing.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">4. Atomic Database Sink Offsets</div>
+      <p>For Case Management (writing to PostgreSQL), the consumer offset is committed in the <strong>exact same ACID transaction</strong> as the case record. On rebalance, the new pod queries the DB and seeks directly to the committed offset.</p>
+    </div>
+  </div>
+
+  <h3>3.4 Explicit Architectural Deviations from Event-Driven Patterns</h3>
+  <p>While event-driven choreography is the optimal default pattern, dogmatic adherence to pure event-driven principles introduces unacceptable latency and consistency challenges in specific financial contexts. The architecture deliberately implements three synchronous deviations:</p>
+
+  <div class="card-grid">
+    <div class="info-card">
+      <div class="card-title" style="color:#0284c7;">1. Synchronous gRPC Payment Gate</div>
+      <p>Card network payment switches (Visa/Mastercard) require a blocking response within 100ms. An optional <strong>Synchronous Fast-Path</strong> executes sub-35ms rule and quantized ML evaluation, returning an immediate APPROVE/DECLINE to the terminal while asynchronously emitting to Kafka for deep scoring and audit.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title" style="color:#7c3aed;">2. Synchronous REST/GraphQL in Analyst BFF</div>
+      <p>When an analyst clicks an active case, the console requires immediate retrieval of historical account dossiers, past transactions, and case notes. Synchronous queries against PostgreSQL read-replicas guarantee snappy UI navigation (&lt; 50ms) without polling event streams.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title" style="color:#dc2626;">3. Synchronous In-Memory Cache (Redis)</div>
+      <p>Computing rolling velocity counters in Feature Aggregation requires immediate state access. Synchronous non-blocking TCP calls to co-located Redis Enterprise complete in &lt; 800 microseconds (&lt; 0.8ms), avoiding multi-hop messaging latency in the critical path.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="section-4" class="report-section">
+  <div class="section-header">
+    <span class="section-number">04</span>
+    <div class="section-title-wrap">
+      <h2>Real-Time Analyst Frontend &amp; BFF Architecture</h2>
+      <p class="section-subtitle">Real-time WebSocket streaming, Backend-for-Frontend orchestration, DOM virtualization, and Explainable AI (SHAP).</p>
+    </div>
+  </div>
+
+  <h3>4.1 Fraud Operations Console Requirements</h3>
+  <p>A high-volume fraud detection platform is only as effective as the speed and accuracy of the human operations team that triages high-risk alerts. When sophisticated fraud attacks occur (e.g., account takeover blitzes or coordinated card fraud rings), the operational console is subjected to sudden floods of incoming alerts.</p>
+  <p>The frontend satisfies four strict engineering requirements:</p>
+
+  <div class="card-grid">
+    <div class="info-card">
+      <div class="card-title">Sub-Second Latency (&lt; 200ms)</div>
+      <p>High-confidence fraud alerts (Score &ge; 0.75) are pushed directly to the analyst's screen within 200 milliseconds of classification via persistent WebSockets.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">60 FPS DOM Virtualization</div>
+      <p>TanStack Virtual recycles 20 visible DOM elements from an in-memory buffer of 15,000+ items, preventing memory bloat and UI freezing during fraud surges.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">Explainable AI (TreeSHAP)</div>
+      <p>Visual radar charts display the top 5 predictive drivers (e.g., impossible travel velocity, foreign IP, sudden spending spike) to comply with FCRA and GDPR Art. 22.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">Distributed Mutex Case Locking</div>
+      <p>Redis Pub/Sub coordinates real-time presence indicators across the analyst team, preventing two investigators from working on the same case concurrently.</p>
+    </div>
+  </div>
+
+  <h3>4.2 Backend-for-Frontend (BFF) Pattern &amp; Streaming Protocol</h3>
+  <p>Directly connecting browser applications to underlying microservices is an anti-pattern that leads to severe over-fetching, chatty mobile/web networks, and tight coupling with internal database schemas. The platform introduces a dedicated <strong>Analyst BFF Service</strong> built in Node.js 22 (Fastify) and TypeScript:</p>
+
+  <div class="callout callout-info">
+    <div class="callout-icon">&#8505;</div>
+    <div class="callout-body">
+      <h4>BFF ViewModel Optimization</h4>
+      <p>The BFF hydrates incoming Kafka fraud alerts with customer KYC standing, past chargeback history, and device fingerprint data into a single tailored UI ViewModel. This eliminates chatty network waterfalls and cuts payload size by over 70% compared to raw microservice entity schemas.</p>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Optimization Mechanism</th>
+          <th style="width: 45%;">Implementation Strategy</th>
+          <th style="width: 30%;">Operational Performance Gain</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>DOM Virtualization</strong></td>
+          <td>TanStack Virtual renders strictly the ~20 table rows within the active browser viewport, dynamically recycling DOM nodes as the user scrolls.</td>
+          <td><span class="badge badge-success">Bounded Memory:</span> &lt; 80MB memory footprint; zero frame drops across 25,000+ alerts.</td>
+        </tr>
+        <tr>
+          <td><strong>Client-Side Caching</strong></td>
+          <td>TanStack Query v5 manages server state with optimistic UI mutations on case triage actions (Assign, Freeze, Resolve).</td>
+          <td><span class="badge badge-success">Instant Feedback:</span> Sub-10ms perceived latency for analyst triage decisions.</td>
+        </tr>
+        <tr>
+          <td><strong>Web Worker Offloading</strong></td>
+          <td>Client-side multi-field filtering, fuzzy text searches, and risk score histogram bucketing run in a separate background Web Worker thread.</td>
+          <td><span class="badge badge-primary">Zero Main-Thread Jank:</span> 100% responsiveness on UI input controls.</td>
+        </tr>
+        <tr>
+          <td><strong>Priority Lane Routing</strong></td>
+          <td>P1 Critical Alerts ($S \ge 0.90$) bypass queue throttles immediately; P2/P3 alerts are debounced into 250ms batch updates.</td>
+          <td><span class="badge badge-warning">Triage Focus:</span> Eliminates continuous visual micro-refreshes for the operator.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<section id="section-5" class="report-section">
+  <div class="section-header">
+    <span class="section-number">05</span>
+    <div class="section-title-wrap">
+      <h2>Enterprise Observability &amp; Telemetry Framework</h2>
+      <p class="section-subtitle">OpenTelemetry standardization, the Three Pillars, cross-telemetry correlation, and formal SLOs.</p>
+    </div>
+  </div>
+
+  <h3>5.1 OpenTelemetry Standard &amp; Pipeline Architecture</h3>
+  <p>In a distributed, event-driven banking architecture handling 1,000 TPS, traditional server monitoring and isolated log grepping are completely obsolete. When an unexpected latency spike or classification anomaly occurs, operators must be able to trace a transaction's journey across network hops, Kafka topic partitions, in-memory caches, and GPU inference models with sub-millisecond precision.</p>
+
+  <div class="card-grid">
+    <div class="info-card">
+      <div class="card-title">Distributed Tracing (Tempo)</div>
+      <p>W3C <code>traceparent</code> headers injected into Kafka record headers guarantee unbroken trace waterfalls across asynchronous messaging boundaries with 100% sampling on fraud alerts.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">Metrics &amp; SLOs (Prometheus)</div>
+      <p>Continuous scraping of Google's Four Golden Signals (Latency histograms, Throughput TPS, Error rates, Kafka consumer lag, and GPU saturation) scraped every 10 seconds.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">Centralized Logs (Loki)</div>
+      <p>Structured JSON logs with automated injection of <code>trace_id</code> and <code>span_id</code>. Automated FluentBit masking sanitizes all PAN and PII before leaving the node.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">Cross-Pillar Correlation</div>
+      <p>Prometheus Exemplars link metric latency spikes directly to Trace IDs. From Tempo, a single click pulls all matching Loki logs for that microsecond window.</p>
+    </div>
+  </div>
+
+  <h3>5.2 Formal Service Level Objectives (SLOs)</h3>
+  <p>To ensure the system remains accountable to business and legal requirements, the platform defines three specific, measurable, and objective <strong>Service Level Objectives (SLOs)</strong> backed by strict <strong>Service Level Indicators (SLIs)</strong>:</p>
+
+  <div class="slo-card">
+    <div class="slo-header">
+      <span class="slo-title">SLO 1: End-to-End Classification Latency (P99)</span>
+      <span class="slo-target">Target: &ge; 99.0% Compliance</span>
+    </div>
+    <div class="slo-body">
+      <p><strong>Objective:</strong> 99.0% of all non-batch transactions must complete end-to-end fraud classification (from ingestion receipt to evaluation event emission) in <strong>&le; 45 milliseconds</strong> over any rolling 5-minute window.</p>
+      <div class="code-block-header">Service Level Indicator (SLI) Query</div>
+      <pre><code>sum(rate(fraud_detection_e2e_duration_seconds_bucket{le="0.045"}[5m]))
+/ sum(rate(fraud_detection_e2e_duration_seconds_count[5m])) >= 0.990</code></pre>
+    </div>
+  </div>
+
+  <div class="slo-card">
+    <div class="slo-header">
+      <span class="slo-title">SLO 2: Fraud Scoring Pipeline Availability &amp; Error Rate</span>
+      <span class="slo-target">Target: &ge; 99.99% Error-Free</span>
+    </div>
+    <div class="slo-body">
+      <p><strong>Objective:</strong> The fraud scoring engine and feature aggregation pipeline must achieve less than 0.01% error rate (<strong>99.99% error-free processing</strong>) over any rolling 1-hour window.</p>
+      <div class="code-block-header">Service Level Indicator (SLI) Query</div>
+      <pre><code>1 - (sum(rate(http_requests_total{status=~"5.."}[1h])) + sum(rate(kafka_processing_errors_total[1h])))
+/ sum(rate(transactions_processed_total[1h])) >= 0.9999</code></pre>
+    </div>
+  </div>
+
+  <div class="slo-card">
+    <div class="slo-header">
+      <span class="slo-title">SLO 3: Compliance Audit Capture Completeness &amp; Replay Fidelity</span>
+      <span class="slo-target">Target: 100% Deterministic Parity</span>
+    </div>
+    <div class="slo-body">
+      <p><strong>Objective:</strong> 100% of transactions ingested by the system must be immutably persisted to WORM compliance storage within 15 seconds, and hourly reconciliation checksum audits must verify <strong>zero event loss (&Delta; = 0)</strong>.</p>
+      <div class="code-block-header">Service Level Indicator (SLI) Query</div>
+      <pre><code>(transactions_ingested_total - audit_persisted_transactions_total) == 0 (verified at T + 15s)</code></pre>
+    </div>
+  </div>
+
+  <h3>5.3 Error Budget &amp; Alerting Tiers</h3>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 15%;">Alert Tier</th>
+          <th style="width: 35%;">Burn Rate &amp; Trigger Condition</th>
+          <th style="width: 25%;">Notification Channel</th>
+          <th style="width: 25%;">Operational Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-danger">P1 Critical</span></td>
+          <td>14.4x Burn Rate (2% budget consumed in 1h) OR P99 Latency &gt; 80ms for 2m.</td>
+          <td>PagerDuty Phone Call to SRE &amp; Lead Architect.</td>
+          <td>Immediate incident bridge; automated circuit breakers trigger rule-based fallback.</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-warning">P2 Major</span></td>
+          <td>6x Burn Rate (5% budget consumed in 6h) OR Kafka Lag &gt; 5,000 messages.</td>
+          <td>PagerDuty &amp; Slack <code>#fraud-ops-critical</code>.</td>
+          <td>Investigate pod autoscaling bottlenecks or Triton GPU inference queues.</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-primary">P3 Minor</span></td>
+          <td>1x Burn Rate (10% budget consumed in 3d) OR DLQ count &gt; 50 records.</td>
+          <td>Jira Ticket &amp; Slack <code>#fraud-ops-warning</code>.</td>
+          <td>Non-urgent triage during business hours; investigate poisoned payload formats.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<section id="section-6" class="report-section">
+  <div class="section-header">
+    <span class="section-number">06</span>
+    <div class="section-title-wrap">
+      <h2>Scalability &amp; Resilience Engineering</h2>
+      <p class="section-subtitle">Single Points of Failure mitigations, data loss prevention, deterministic replay pipelines, and KEDA elastic scaling.</p>
+    </div>
+  </div>
+
+  <h3>6.1 Single Points of Failure (SPOFs) Identification &amp; Mitigation</h3>
+  <p>Financial mission-critical architectures must be engineered under the assumption that any individual hardware node, network link, cloud availability zone, or software component can and will fail abruptly. The platform systematically identifies and neutralizes all potential Single Points of Failure:</p>
+
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 20%;">Potential SPOF</th>
+          <th style="width: 25%;">Failure Scenario &amp; Impact</th>
+          <th style="width: 35%;">Architectural Mitigation Strategy</th>
+          <th style="width: 20%;">Target RTO / RPO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Kafka Broker Failure</strong></td>
+          <td>Loss of an entire cloud availability zone causes Kafka broker nodes to drop offline.</td>
+          <td>Deploy across <strong>3 Availability Zones</strong> with Replication Factor 3 ($	ext{RF}=3$) and $	ext{min.insync.replicas}=2$. KRaft Quorum eliminates ZooKeeper SPOF.</td>
+          <td><span class="badge badge-success">RPO = 0</span><br><span class="badge badge-primary">RTO &lt; 2s</span></td>
+        </tr>
+        <tr>
+          <td><strong>Redis Cache Failure</strong></td>
+          <td>Redis node crash prevents Feature Aggregator from retrieving rolling velocity state.</td>
+          <td><strong>Redis Enterprise Multi-AZ Cluster</strong> with active-active Sentinel failover and AOF persistence. Microservices implement Resilience4j circuit breakers with local LRU fallback.</td>
+          <td><span class="badge badge-success">Graceful Degradation</span><br><span class="badge badge-primary">RTO &lt; 3s</span></td>
+        </tr>
+        <tr>
+          <td><strong>Triton ML Model Crash</strong></td>
+          <td>GPU memory lock causes inference latency to exceed budget (&gt; 20ms).</td>
+          <td>Envoy Sidecar Circuit Breakers enforce 20ms hard deadlines. On timeout, traffic instantly diverts to an embedded <strong>Heuristic Rule Engine</strong> (&lt; 2ms).</td>
+          <td><span class="badge badge-success">RTO = 0</span><br>(Immediate Heuristic Fallback)</td>
+        </tr>
+        <tr>
+          <td><strong>Case Database Outage</strong></td>
+          <td>Hardware failure takes down primary PostgreSQL instance.</td>
+          <td><strong>Amazon Aurora Multi-AZ</strong> with automated sub-30s failover. Kafka buffers fraud alerts for up to 14 days without dropping records while the database recovers.</td>
+          <td><span class="badge badge-success">Zero Alert Loss</span><br><span class="badge badge-primary">RTO &lt; 30s</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>6.2 Compliance Replay Pipeline &amp; Audit Reconstruction</h3>
+  <p>A cornerstone requirement of Basel III and BCBS 239 is the ability to perform <strong>deterministic historical transaction replay</strong>. The platform establishes an automated replay pipeline:</p>
+
+  <div class="card-grid">
+    <div class="info-card">
+      <div class="card-title">1. WORM Immutability</div>
+      <p>All production Kafka streams are batch-compacted into Apache Parquet/Iceberg format and written to S3 Object Lock in Compliance Mode (7-year mandatory retention).</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">2. Isolated Replay Topic</div>
+      <p>Replay worker pods stream historical Parquet slices into an isolated Kafka topic (<code>trans.replay.v1</code>), preserving original timestamps without impacting production.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">3. Shadow Scoring Sandbox</div>
+      <p>A dedicated Shadow Scoring Engine evaluates replayed transactions against new candidate models (v2.4) to benchmark false positive reductions before production release.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">4. Automated Parity Audits</div>
+      <p>Hourly reconciliation workers compute checksums verifying that 100% of ingested Kafka events exist in the immutable WORM lakehouse with zero data loss (&Delta; = 0).</p>
+    </div>
+  </div>
+
+  <h3>6.3 Comprehensive Scaling Strategies Across System Components</h3>
+  <p>To sustain peak volumes of 1,000 TPS (with surge headroom up to 3,000+ TPS) while maintaining cost efficiency during off-peak night troughs (100 TPS), the platform implements dedicated scaling strategies across <strong>Individual Microservices</strong>, <strong>Analytic Workloads</strong>, and <strong>Event Messaging</strong>:</p>
+
+  <div class="card-grid">
+    <div class="info-card">
+      <div class="card-title">1. Individual Microservices</div>
+      <p>Stateless Go and Node.js pods scaled via KEDA on Kafka lag and HTTP rates. Sub-50ms cold starts, PodDisruptionBudgets (<code>minAvailable: 75%</code>), and cross-AZ anti-affinity spread ensure continuous availability.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">2. Analytic &amp; ML Workloads</div>
+      <p>Flink Reactive Mode rescales stateful sliding windows across RocksDB partitions. Triton dynamically micro-batches GPU inference (2ms window) and runs INT8 TensorRT models, with Karpenter scaling GPU node pools.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">3. Event Messaging Topology</div>
+      <p>32 partitions per topic keyed by <code>account_id</code> handle up to 3,000+ TPS uniformly. Storage-optimized brokers with KRaft quorum guarantee zero partition hot-spotting and sub-second failover.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">4. Exactly-Once Scaling (EOS)</div>
+      <p>CooperativeStickyAssignor revokes only migrated partitions. Stream hops use Kafka Transactions (<code>sendOffsetsToTransaction</code>), while DB sinks commit Kafka offsets atomically inside the PostgreSQL ACID case transaction.</p>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 22%;">Scaling Pillar</th>
+          <th style="width: 48%;">Mechanism &amp; Rebalance Protocol</th>
+          <th style="width: 30%;">Operational Guarantee</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Stateless Services</strong><br>(Ingress &amp; BFF)</td>
+          <td>KEDA scales pod replicas based on request rates and consumer lag. Envoy maintains long-lived HTTP/2 multiplexed connections.</td>
+          <td><span class="badge badge-success">Elastic Dynamic Range:</span> 4 to 32 pods; sub-50ms container initialization.</td>
+        </tr>
+        <tr>
+          <td><strong>Analytic Workloads</strong><br>(Flink &amp; Triton)</td>
+          <td>Flink Reactive Mode automatically redistributes RocksDB state partitions. Triton dynamically micro-batches inference requests over 2ms windows.</td>
+          <td><span class="badge badge-primary">4x GPU Throughput:</span> INT8 quantization keeps model inference &lt; 10ms at 1,000 TPS.</td>
+        </tr>
+        <tr>
+          <td><strong>Stream-to-Stream Hops</strong><br>(Feature Agg &amp; Scoring)</td>
+          <td>Kafka Transactional API: <code>producer.sendOffsetsToTransaction()</code> commits offsets inside the transaction. Rebalances abort in-flight transactions with zombie fencing.</td>
+          <td><span class="badge badge-success">Strictly Exactly-Once:</span> Downstream <code>read_committed</code> consumers never read aborted records.</td>
+        </tr>
+        <tr>
+          <td><strong>Stream-to-Store Sinks</strong><br>(Case BFF &amp; Archiver)</td>
+          <td>Transactional Sink Pattern: Consumer offset is committed in the <strong>exact same PostgreSQL ACID transaction</strong> as the case record. On rebalance, the pod seeks to <code>offset + 1</code>.</td>
+          <td><span class="badge badge-warning">Zero Duplicate Cases:</span> Database rollback prevents phantom alerts during scale-out.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<section id="section-7" class="report-section">
+  <div class="section-header">
+    <span class="section-number">07</span>
+    <div class="section-title-wrap">
+      <h2>Architectural Patterns Evaluation &amp; Cost-Benefit Analysis</h2>
+      <p class="section-subtitle">Evaluating Service Mesh, Backend-for-Frontend, Multi-Tier Caching, and Event Sourcing against financial risk.</p>
+    </div>
+  </div>
+
+  <h3>7.1 Cross-Cutting Architectural Patterns Matrix</h3>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 18%;">Architectural Pattern</th>
+          <th style="width: 27%;">Scalability Contribution</th>
+          <th style="width: 27%;">Resilience Contribution</th>
+          <th style="width: 28%;">Security &amp; Governance Contribution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Service Mesh</strong><br>(Istio / Envoy)</td>
+          <td>Decouples networking from code; enables fine-grained client-side load balancing.</td>
+          <td>Transparent circuit breakers, retries with jitter, and canary traffic shifting.</td>
+          <td><span class="badge badge-primary">Zero-Trust mTLS:</span> Automated X.509 certificate rotation every 24h; strict PCI-DSS v4.0 compliance.</td>
+        </tr>
+        <tr>
+          <td><strong>Backend-for-Frontend</strong><br>(BFF Pattern)</td>
+          <td>Shields core services from chatty UI traffic; multiplexes 500+ analyst connections.</td>
+          <td>Isolates UI crashes from payment pipelines; graceful degradation on DB errors.</td>
+          <td><span class="badge badge-success">Data Masking:</span> Sanitizes card tokens before browser rendering; enforces fine-grained OIDC RBAC.</td>
+        </tr>
+        <tr>
+          <td><strong>Multi-Tier Caching</strong><br>(L1 Local + L2 Redis)</td>
+          <td>Offloads 95% of state reads from databases; supports 100,000+ ops/sec for velocity.</td>
+          <td>Local L1 cache serves heuristic defaults if the distributed Redis cluster fails over.</td>
+          <td><span class="badge badge-warning">Encrypted State:</span> TLS in-transit and AES-256 at-rest; ephemeral keys expire via automated TTLs.</td>
+        </tr>
+        <tr>
+          <td><strong>Event Sourcing &amp; EDA</strong><br>(Apache Kafka)</td>
+          <td>Scales linearly with topic partitions; supports 1,000 to 10,000+ TPS seamlessly.</td>
+          <td>Absorbs extreme traffic bursts; isolates service outages; enables replay reconstruction.</td>
+          <td><span class="badge badge-primary">Immutable Provenance:</span> Non-repudiable audit log fulfilling BCBS 239 and Basel III legal standards.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>7.2 Critical Cost-Benefit &amp; Risk Rationale</h3>
+  <div class="card-grid">
+    <div class="info-card">
+      <div class="card-title">Service Mesh Latency Overhead</div>
+      <p>Envoy sidecars introduce 0.8ms to 1.5ms of network hop latency. In our 45ms execution budget, this overhead represents ~5% of total budget. The trade-off is decisively justified by automated mutual TLS 1.3 encryption across all pods and granular canary release controls.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">Eventual Consistency in Fraud Operations</div>
+      <p>Event-driven choreography introduces sub-second eventual consistency (&lt; 100ms) between transaction occurrence and analyst UI queue insertion. In financial fraud operations, this microsecond delay is completely imperceptible to human operators while providing 100% decoupling.</p>
+    </div>
+  </div>
+</section>
+
+
+<section id="section-8" class="report-section">
+  <div class="section-header">
+    <span class="section-number">08</span>
+    <div class="section-title-wrap">
+      <h2>Proposed Technology Stack &amp; Justifications</h2>
+      <p class="section-subtitle">Evaluating databases, frameworks, messaging, and cloud infrastructure with architectural trade-offs.</p>
+    </div>
+  </div>
+
+  <h3>8.1 Comprehensive Technology Selection Matrix</h3>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 20%;">Architectural Layer</th>
+          <th style="width: 22%;">Technology Selection</th>
+          <th style="width: 33%;">Primary Architectural Justification</th>
+          <th style="width: 25%;">Rejected Alternative &amp; Rationale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Edge Ingress Gateway</strong></td>
+          <td><strong>Envoy / Kong Ingress</strong></td>
+          <td>C++ speed; native mTLS termination; OTel span injection; token-bucket rate limiting.</td>
+          <td><em>AWS API Gateway:</em> Prohibitive pricing at 1,000 TPS ($8.6M/yr) and cold starts.</td>
+        </tr>
+        <tr>
+          <td><strong>Ingestion Microservice</strong></td>
+          <td><strong>Go 1.23</strong></td>
+          <td>Native binary; sub-50ms cold starts; zero GC jitter; lightweight goroutines.</td>
+          <td><em>Java Spring:</em> 10x higher memory footprint and JVM warm-up latency spikes.</td>
+        </tr>
+        <tr>
+          <td><strong>Feature Streaming</strong></td>
+          <td><strong>Apache Flink / Streams</strong></td>
+          <td>True event-by-event streaming; sub-5ms sliding-window calculations; RocksDB state.</td>
+          <td><em>Spark Streaming:</em> Micro-batching introduces 100-500ms delay, breaching SLO.</td>
+        </tr>
+        <tr>
+          <td><strong>Distributed L2 Cache</strong></td>
+          <td><strong>Redis Enterprise Cluster</strong></td>
+          <td>Sub-millisecond lookups (&lt;0.8ms); atomic counters (<code>INCRBY</code>); multi-AZ active-active.</td>
+          <td><em>Memcached:</em> Lacks persistence, sorted sets, and active multi-AZ clustering.</td>
+        </tr>
+        <tr>
+          <td><strong>ML Inference Server</strong></td>
+          <td><strong>Triton Inference (NVIDIA)</strong></td>
+          <td>C++ engine; ONNX/TensorRT native; dynamic request micro-batching; CPU/GPU support.</td>
+          <td><em>FastAPI/Flask:</em> Python GIL bottlenecks and high latency variance.</td>
+        </tr>
+        <tr>
+          <td><strong>Case Management DB</strong></td>
+          <td><strong>Aurora PostgreSQL Multi-AZ</strong></td>
+          <td>ACID compliance for legal cases; automated sub-30s failover; JSONB flexibility.</td>
+          <td><em>MongoDB:</em> Eventual consistency risks and lack of relational audit constraints.</td>
+        </tr>
+        <tr>
+          <td><strong>Compliance WORM Store</strong></td>
+          <td><strong>Apache Iceberg on S3 Lock</strong></td>
+          <td>WORM 7-year legal lock; Parquet columnar format (6:1 ZSTD ratio); partition pruning.</td>
+          <td><em>Snowflake:</em> Prohibitive 24/7 compute clustering costs at 86.4M events/day.</td>
+        </tr>
+        <tr>
+          <td><strong>Messaging Backbone</strong></td>
+          <td><strong>Apache Kafka (MSK/Strimzi)</strong></td>
+          <td>32 partitions/topic; immutable replayable commit log; key ordering by account_id.</td>
+          <td><em>RabbitMQ/SQS:</em> Transient queue semantics delete messages on ACK, destroying replay.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<section id="section-9" class="report-section">
+  <div class="section-header">
+    <span class="section-number">09</span>
+    <div class="section-title-wrap">
+      <h2>Critical Evaluation &amp; Financial Services Trade-Offs</h2>
+      <p class="section-subtitle">Dual-track inline vs. streaming evaluation, EOS vs. idempotency, and regulatory compliance alignment.</p>
+    </div>
+  </div>
+
+  <h3>9.1 Architectural Trade-Off Analysis</h3>
+  <div class="card-grid">
+    <div class="info-card">
+      <div class="card-title">1. Synchronous Gate vs. Async Streaming</div>
+      <p>Card networks enforce strict 100ms timeouts. We implement a <strong>Dual-Track Strategy</strong>: A sub-35ms synchronous gRPC path performs rapid heuristic rule checks to approve/decline card terminal authorizations, while an asynchronous Kafka pipeline computes deep graph features and pushes cases to analysts.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">2. Exactly-Once Scaling vs. Distributed 2PC</div>
+      <p>Heterogeneous 2PC transactions stall pipelines under heavy load. We achieve <strong>True Exactly-Once Processing (EOS)</strong> during horizontal scaling via Kafka's Transactional API (<code>sendOffsetsToTransaction</code>) for stream hops, combined with DB-coupled atomic offset commits for PostgreSQL sinks.</p>
+    </div>
+  </div>
+
+  <h3>9.2 Regulatory &amp; Legal Compliance Alignment</h3>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Regulatory Framework</th>
+          <th style="width: 35%;">Mandatory Legal Requirement</th>
+          <th style="width: 40%;">Architectural Implementation in Solution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>BCBS 239 / Basel III</strong></td>
+          <td>Immutable risk data aggregation; timely reporting of aggregate risk; audit replayability.</td>
+          <td><span class="badge badge-primary">WORM Lakehouse:</span> Parquet events stored in S3 Object Lock for 7 years. Automated hourly checksum jobs verify zero data loss.</td>
+        </tr>
+        <tr>
+          <td><strong>PCI-DSS v4.0</strong></td>
+          <td>Protect cardholder data; encrypt transmission across all internal and external networks.</td>
+          <td><span class="badge badge-success">Zero-Trust &amp; Tokens:</span> PANs tokenized at ingress gateway via HSM. Istio enforces strict mTLS 1.3 across all Kubernetes pods.</td>
+        </tr>
+        <tr>
+          <td><strong>GDPR Art. 22 / FCRA</strong></td>
+          <td>Right to explanation for automated legal or financial adverse decisions (e.g., account lock).</td>
+          <td><span class="badge badge-warning">Explainable AI:</span> TreeSHAP feature attributions calculate exact feature contribution scores for every automated decision.</td>
+        </tr>
+        <tr>
+          <td><strong>FinCEN / BSA (AML/SAR)</strong></td>
+          <td>Detection and reporting of structuring and suspicious money laundering transactions.</td>
+          <td><span class="badge badge-danger">Temporal Windows:</span> Flink aggregates 24h and 30-day cross-channel velocity counters to identify structuring patterns.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<section id="section-10" class="report-section">
+  <div class="section-header">
+    <span class="section-number">10</span>
+    <div class="section-title-wrap">
+      <h2>Standout Production Strategies: Deployment &amp; Extreme Load Management</h2>
+      <p class="section-subtitle">Real-world AWS deployment mapping, handling cloud provider idiosyncrasies, and surviving EOFY / audit surges.</p>
+    </div>
+  </div>
+
+  <h3>10.1 Real-World Cloud Blueprint &amp; Provider Idiosyncrasies</h3>
+  <div class="card-grid">
+    <div class="info-card">
+      <div class="card-title">Multi-AZ Rack-Aware Routing</div>
+      <p>AWS cross-AZ traffic adds 1-2ms latency and $0.01/GB costs. Kafka consumers implement <strong>Rack-Aware Fetching</strong> (<code>client.rack = az_name</code>), reading strictly from broker replicas in the same physical AZ to eliminate cross-zone latency and network egress bills.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">Provisioned EBS IOPS (io2 Block Express)</div>
+      <p>Standard gp3 burst buckets exhaust within hours at 1,000 TPS. Brokers utilize dedicated <strong>io2 Block Express volumes</strong> with 15,000 provisioned IOPS, guaranteeing zero disk wait throttling during sustained transaction surges.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">EKS Pod Identity Caching</div>
+      <p>Rapid scale-out of 100+ pods can trigger AWS STS rate limits. Pods utilize <strong>EKS Pod Identity</strong> with client-side credential caching, completely eliminating authentication bottlenecks during scaling bursts.</p>
+    </div>
+  </div>
+
+  <h3>10.2 Surviving Extreme Surges: EOFY &amp; Compliance Audits</h3>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Proactive Strategy</th>
+          <th style="width: 45%;">Operational Mechanism</th>
+          <th style="width: 30%;">Business &amp; Resilience Benefit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Dedicated Audit Isolation Cluster</strong></td>
+          <td>Compliance historical replays and ad-hoc auditor queries run on an independent secondary EKS cluster reading S3 Parquet copies.</td>
+          <td><span class="badge badge-success">Zero Production Interference:</span> Multi-terabyte audit extraction never steals CPU or IOPS from live payment flows.</td>
+        </tr>
+        <tr>
+          <td><strong>Predictive Scheduled Pre-Warming</strong></td>
+          <td>KEDA Cron Scalers pre-heat pod replicas and GPU node pools 3 hours prior to known EOFY deadlines (e.g. Dec 31 / June 30 midnight).</td>
+          <td><span class="badge badge-primary">Zero Cold-Start Lag:</span> Instant readiness for 3,500+ TPS payment surges with zero queued latency.</td>
+        </tr>
+        <tr>
+          <td><strong>Tiered Adaptive Load Shedding</strong></td>
+          <td>If volume exceeds 3,000 TPS, the engine temporarily bypasses deep autoencoders and on-the-fly SHAP calculation for approved transactions.</td>
+          <td><span class="badge badge-warning">100% Availability:</span> Core LightGBM and rule engine guarantee sub-45ms execution for 100% of transactions.</td>
+        </tr>
+        <tr>
+          <td><strong>Chaos Engineering GameDays</strong></td>
+          <td>Automated Chaos Mesh injections simulate losing an entire cloud AZ combined with synthetic 4,000 TPS stress loads.</td>
+          <td><span class="badge badge-danger">Validated Resilience:</span> Proves automatic sub-2s failover before live real-world catastrophes occur.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<section id="section-11" class="report-section page-break-before">
+  <div class="section-header">
+    <span class="section-number">11</span>
+    <div class="section-title-wrap">
+      <h2>Architecture Diagrams Gallery &amp; Visual Walkthrough</h2>
+      <p class="section-subtitle">Comprehensive visual aids illustrating component interactions, event flows, journeys, and telemetry.</p>
+    </div>
+  </div>
+
+  <div class="diagram-wrapper page-break-before">
+    <div class="diagram-container">
+      <svg viewBox="0 0 1200 780" width="100%" height="780" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="k8sGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1e38" />
+      <stop offset="100%" stop-color="#17172b" />
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#fb923c"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#f87171"/>
+    </marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="1200" height="780" fill="url(#bgGrad)" rx="12" />
+  <rect x="15" y="15" width="1170" height="750" fill="none" stroke="#334155" stroke-width="1.5" rx="10" />
+
+  <!-- Title Bar -->
+  <text x="35" y="48" fill="#f8fafc" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Figure 1: Solution Architecture Diagram (C4 Container View)</text>
+  <text x="35" y="70" fill="#94a3b8" font-family="'Segoe UI', Roboto, sans-serif" font-size="12">Cloud-Native, Real-Time Financial Fraud Detection Platform (Peak: 1,000 TPS | Latency P99 &lt; 45ms)</text>
+
+  <!-- REGION 1: External Rails & Ingress (Left) -->
+  <rect x="35" y="90" width="160" height="520" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="35" y="90" width="160" height="32" rx="8" fill="#334155" />
+  <text x="115" y="111" fill="#f1f5f9" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Payment Ingress Rails</text>
+
+  <!-- Card: Visa / MC / Swift -->
+  <rect x="45" y="135" width="140" height="65" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="115" y="158" fill="#e2e8f0" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Card Networks</text>
+  <text x="115" y="174" fill="#94a3b8" font-family="sans-serif" font-size="9" text-anchor="middle">Visa / MC / Amex</text>
+  <text x="115" y="188" fill="#38bdf8" font-family="monospace" font-size="9" text-anchor="middle">ISO 8583 / 20022</text>
+
+  <!-- Card: Real-time Rails (FedNow / SEPA) -->
+  <rect x="45" y="215" width="140" height="65" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="115" y="238" fill="#e2e8f0" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Instant Payments</text>
+  <text x="115" y="254" fill="#94a3b8" font-family="sans-serif" font-size="9" text-anchor="middle">FedNow / SEPA Instant</text>
+  <text x="115" y="268" fill="#38bdf8" font-family="monospace" font-size="9" text-anchor="middle">Sub-second Clearing</text>
+
+  <!-- Card: Core Banking System -->
+  <rect x="45" y="295" width="140" height="65" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="115" y="318" fill="#e2e8f0" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Core Banking System</text>
+  <text x="115" y="334" fill="#94a3b8" font-family="sans-serif" font-size="9" text-anchor="middle">DDA / Ledger / Accts</text>
+  <text x="115" y="348" fill="#38bdf8" font-family="monospace" font-size="9" text-anchor="middle">REST / gRPC TLS 1.3</text>
+
+  <!-- Card: Mobile & Online Banking -->
+  <rect x="45" y="375" width="140" height="65" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="115" y="398" fill="#e2e8f0" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Digital Channels</text>
+  <text x="115" y="414" fill="#94a3b8" font-family="sans-serif" font-size="9" text-anchor="middle">Mobile Apps / Web</text>
+  <text x="115" y="428" fill="#38bdf8" font-family="monospace" font-size="9" text-anchor="middle">OAuth2 / OIDC JWT</text>
+
+  <!-- Card: Edge Gateway & Tokenizer -->
+  <rect x="45" y="460" width="140" height="135" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5"/>
+  <text x="115" y="482" fill="#c7d2fe" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Edge API Gateway</text>
+  <text x="115" y="498" fill="#a5b4fc" font-family="sans-serif" font-size="9" text-anchor="middle">Envoy / Kong Ingress</text>
+  <line x1="55" y1="506" x2="175" y2="506" stroke="#4338ca" stroke-width="1" />
+  <text x="55" y="522" fill="#e0e7ff" font-family="sans-serif" font-size="9">&#8226; WAF &amp; DDoS Shield</text>
+  <text x="55" y="538" fill="#e0e7ff" font-family="sans-serif" font-size="9">&#8226; mTLS Termination</text>
+  <text x="55" y="554" fill="#e0e7ff" font-family="sans-serif" font-size="9">&#8226; Rate Limiter (Token Bkt)</text>
+  <text x="55" y="570" fill="#e0e7ff" font-family="sans-serif" font-size="9">&#8226; PAN Tokenizer (HSM)</text>
+
+  <!-- Connectors from Rails to Gateway -->
+  <path d="M 185 167 L 210 167 L 210 500 L 185 500" fill="none" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3" />
+  <path d="M 185 247 L 205 247 L 205 520 L 185 520" fill="none" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3" />
+  <path d="M 185 327 L 200 327 L 200 540 L 185 540" fill="none" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3" />
+
+  <!-- REGION 2: Kubernetes Service Mesh Platform (Center) -->
+  <rect x="225" y="90" width="670" height="520" rx="8" fill="url(#k8sGrad)" stroke="#6366f1" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="225" y="90" width="670" height="32" rx="8" fill="#312e81" />
+  <text x="560" y="111" fill="#e0e7ff" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Cloud-Native Microservices Mesh (Kubernetes EKS / GKE + Istio Service Mesh)</text>
+
+  <!-- Gateway to Ingestion Service Arrow -->
+  <line x1="185" y1="527" x2="245" y2="527" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="215" y="520" fill="#38bdf8" font-family="sans-serif" font-size="8" text-anchor="middle">HTTPS/gRPC</text>
+
+  <!-- Service 1: Ingestion Gateway Service -->
+  <rect x="245" y="475" width="160" height="105" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="325" y="497" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Ingestion Gateway Svc</text>
+  <text x="325" y="512" fill="#94a3b8" font-family="monospace" font-size="9" text-anchor="middle">Go 1.23 | KEDA Scaled</text>
+  <line x1="255" y1="520" x2="395" y2="520" stroke="#334155" stroke-width="1" />
+  <text x="255" y="535" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Schema Validate (Avro)</text>
+  <text x="255" y="549" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Idempotency Check</text>
+  <text x="255" y="563" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; W3C Trace Injection</text>
+
+  <!-- Central Apache Kafka Event Backbone -->
+  <rect x="245" y="325" width="630" height="120" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+  <rect x="245" y="325" width="630" height="26" rx="8" fill="#78350f" />
+  <text x="560" y="342" fill="#fef3c7" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Event Backbone: Apache Kafka Enterprise (32 Partitions / Topic | KRaft Quorum | 3-AZ Replicated)</text>
+
+  <!-- Kafka Topics visual boxes -->
+  <rect x="260" y="360" width="130" height="42" rx="4" fill="#1e293b" stroke="#fb923c" stroke-width="1"/>
+  <text x="325" y="377" fill="#fb923c" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle">trans.raw.v1</text>
+  <text x="325" y="392" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Key: account_id</text>
+
+  <rect x="410" y="360" width="145" height="42" rx="4" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+  <text x="482" y="377" fill="#34d399" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle">trans.enriched.v1</text>
+  <text x="482" y="392" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Features Attached</text>
+
+  <rect x="575" y="360" width="145" height="42" rx="4" fill="#1e293b" stroke="#f87171" stroke-width="1"/>
+  <text x="647" y="377" fill="#f87171" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle">fraud.evaluated.v1</text>
+  <text x="647" y="392" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Score &amp; Decision</text>
+
+  <rect x="740" y="360" width="120" height="42" rx="4" fill="#1e293b" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="800" y="377" fill="#ef4444" font-family="monospace" font-size="9" font-weight="700" text-anchor="middle">fraud.alert.v1</text>
+  <text x="800" y="392" fill="#fca5a5" font-family="sans-serif" font-size="8" text-anchor="middle">Score &gt;= 0.75</text>
+
+  <text x="560" y="425" fill="#94a3b8" font-family="monospace" font-size="8" text-anchor="middle">Dead Letter Queues (DLQ): trans.raw.dlq | trans.enriched.dlq | fraud.eval.dlq (Poison Pill Quarantine)</text>
+
+  <!-- Ingestion produces to trans.raw.v1 -->
+  <line x1="325" y1="475" x2="325" y2="408" stroke="#fb923c" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <text x="335" y="445" fill="#fb923c" font-family="sans-serif" font-size="8">Publish Event</text>
+
+  <!-- Service 2: Feature Aggregation Service -->
+  <rect x="420" y="475" width="170" height="105" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1.5"/>
+  <text x="505" y="497" fill="#34d399" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Feature Aggregation Svc</text>
+  <text x="505" y="512" fill="#94a3b8" font-family="monospace" font-size="9" text-anchor="middle">Apache Flink / Streams</text>
+  <line x1="430" y1="520" x2="580" y2="520" stroke="#334155" stroke-width="1" />
+  <text x="430" y="535" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Velocity &amp; Frequency Windows</text>
+  <text x="430" y="549" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Geo-Distance Velocity Check</text>
+  <text x="430" y="563" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Historical Spending Deviation</text>
+
+  <!-- In-Memory Distributed Cache (Redis) -->
+  <rect x="420" y="620" width="170" height="55" rx="6" fill="#450a0a" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="505" y="642" fill="#fca5a5" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Redis Enterprise Cluster</text>
+  <text x="505" y="658" fill="#f87171" font-family="monospace" font-size="8.5" text-anchor="middle">L2 Feature Cache (&lt;1ms)</text>
+
+  <!-- Connectors for Feature Aggregator -->
+  <path d="M 370 405 L 370 460 L 450 460 L 450 475" fill="none" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrowOrange)"/>
+  <line x1="505" y1="580" x2="505" y2="614" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#arrowRed)"/>
+  <line x1="535" y1="475" x2="535" y2="408" stroke="#34d399" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="545" y="445" fill="#34d399" font-family="sans-serif" font-size="8">Publish Enriched</text>
+
+  <!-- Service 3: Fraud Scoring & ML Inference Engine -->
+  <rect x="620" y="475" width="180" height="105" rx="6" fill="#1e293b" stroke="#f87171" stroke-width="1.5"/>
+  <text x="710" y="497" fill="#f87171" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Fraud Scoring Engine</text>
+  <text x="710" y="512" fill="#94a3b8" font-family="monospace" font-size="9" text-anchor="middle">Triton Inference | &lt;15ms</text>
+  <line x1="630" y1="520" x2="790" y2="520" stroke="#334155" stroke-width="1" />
+  <text x="630" y="535" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Rule Engine (Sanctions, Lists)</text>
+  <text x="630" y="549" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; LightGBM / ONNX Ensemble</text>
+  <text x="630" y="563" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Deep Autoencoder Anomaly</text>
+
+  <!-- Connector from Enriched Topic to Scoring Engine -->
+  <line x1="647" y1="405" x2="647" y2="470" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <!-- Scoring Engine publishes Evaluated and Alert -->
+  <line x1="720" y1="475" x2="720" y2="408" stroke="#f87171" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <path d="M 770 475 L 770 430 L 810 430 L 810 408" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowRed)"/>
+
+  <!-- Service 4: Notification & Downstream Action Service -->
+  <rect x="245" y="145" width="180" height="100" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="335" y="167" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Downstream Action Svc</text>
+  <text x="335" y="182" fill="#94a3b8" font-family="monospace" font-size="9" text-anchor="middle">Java Quarkus / Reactive</text>
+  <line x1="255" y1="190" x2="415" y2="190" stroke="#334155" stroke-width="1" />
+  <text x="255" y="205" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Automated Card Lock</text>
+  <text x="255" y="219" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; 3DS Step-Up Challenge (SMS)</text>
+  <text x="255" y="233" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Core Rail Settlement Block</text>
+
+  <!-- Connector from Evaluated Topic to Downstream Action Svc -->
+  <path d="M 647 360 L 647 280 L 335 280 L 335 251" fill="none" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <!-- Service 5: Case Management & Analyst BFF Service -->
+  <rect x="680" y="145" width="200" height="150" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1.5"/>
+  <text x="780" y="167" fill="#c084fc" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Case Management &amp; BFF</text>
+  <text x="780" y="182" fill="#94a3b8" font-family="monospace" font-size="9" text-anchor="middle">Node.js 22 / Fastify</text>
+  <line x1="690" y1="190" x2="870" y2="190" stroke="#334155" stroke-width="1" />
+  <text x="690" y="205" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Alert Triage &amp; Queue Mgmt</text>
+  <text x="690" y="219" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; WebSocket Hub (STOMP/Push)</text>
+  <text x="690" y="233" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; SHAP Attribution Aggregation</text>
+  <text x="690" y="247" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; RBAC &amp; Audit Trail</text>
+  <rect x="690" y="258" width="180" height="28" rx="4" fill="#0f172a" stroke="#818cf8" stroke-width="1"/>
+  <text x="780" y="276" fill="#c7d2fe" font-family="sans-serif" font-size="9" text-anchor="middle">PostgreSQL Case Store (Multi-AZ)</text>
+
+  <!-- Connector from Alert Topic to Case Mgmt BFF -->
+  <path d="M 800 360 L 800 301" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowRed)"/>
+
+  <!-- REGION 3: Frontend & Analyst Console (Top Right) -->
+  <rect x="920" y="90" width="250" height="230" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="920" y="90" width="250" height="32" rx="8" fill="#0369a1" />
+  <text x="1045" y="111" fill="#f0f9ff" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Fraud Analyst Real-Time Console</text>
+
+  <rect x="935" y="135" width="220" height="170" rx="6" fill="#0f172a" stroke="#0ea5e9" stroke-width="1"/>
+  <text x="1045" y="155" fill="#e0f2fe" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">React 19 / Next.js SPA</text>
+  <text x="945" y="175" fill="#bae6fd" font-family="sans-serif" font-size="8.5">&#8226; WebSocket Live Alert Stream</text>
+  <text x="945" y="191" fill="#bae6fd" font-family="sans-serif" font-size="8.5">&#8226; DOM Virtualized Feed (10k items)</text>
+  <text x="945" y="207" fill="#bae6fd" font-family="sans-serif" font-size="8.5">&#8226; Explainable AI (SHAP Radar Chart)</text>
+  <text x="945" y="223" fill="#bae6fd" font-family="sans-serif" font-size="8.5">&#8226; 1-Click Freeze / Whitelist / Escalate</text>
+  <text x="945" y="239" fill="#bae6fd" font-family="sans-serif" font-size="8.5">&#8226; TanStack Query Optimistic Cache</text>
+  <text x="945" y="255" fill="#bae6fd" font-family="sans-serif" font-size="8.5">&#8226; Web Worker Background Filter</text>
+  <rect x="945" y="268" width="200" height="26" rx="4" fill="#0369a1" />
+  <text x="1045" y="285" fill="#ffffff" font-family="sans-serif" font-size="9" font-weight="700" text-anchor="middle">Analyst Response Time &lt; 2.5s</text>
+
+  <!-- BFF to Frontend WebSocket Arrow -->
+  <line x1="880" y1="215" x2="914" y2="215" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+  <text x="900" y="205" fill="#38bdf8" font-family="sans-serif" font-size="8" text-anchor="middle">WSS</text>
+
+  <!-- REGION 4: Compliance, Audit & Replay (Bottom Right) -->
+  <rect x="920" y="340" width="250" height="270" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="920" y="340" width="250" height="32" rx="8" fill="#6b21a8" />
+  <text x="1045" y="361" fill="#faf5ff" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Compliance, Audit &amp; Replay (CAR)</text>
+
+  <!-- Service 6: Compliance Replay Service -->
+  <rect x="935" y="385" width="220" height="95" rx="6" fill="#0f172a" stroke="#c084fc" stroke-width="1"/>
+  <text x="1045" y="405" fill="#f3e8ff" font-family="sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">Compliance &amp; Replay Engine</text>
+  <text x="945" y="425" fill="#e9d5ff" font-family="sans-serif" font-size="8.5">&#8226; Immutable Stream Archival</text>
+  <text x="945" y="440" fill="#e9d5ff" font-family="sans-serif" font-size="8.5">&#8226; BCBS 239 / Basel III Compliance</text>
+  <text x="945" y="455" fill="#e9d5ff" font-family="sans-serif" font-size="8.5">&#8226; Deterministic Replay Worker Pool</text>
+  <text x="945" y="470" fill="#e9d5ff" font-family="sans-serif" font-size="8.5">&#8226; Shadow Model Backtesting</text>
+
+  <!-- Immutable Storage (S3 Object Lock / WORM) -->
+  <rect x="935" y="495" width="220" height="100" rx="6" fill="#2e1065" stroke="#d8b4fe" stroke-width="1.5"/>
+  <text x="1045" y="517" fill="#f5d0fe" font-family="sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">WORM Compliance Lakehouse</text>
+  <text x="1045" y="533" fill="#e879f9" font-family="sans-serif" font-size="9" text-anchor="middle">AWS S3 / GCS Object Lock (7-Yr Retention)</text>
+  <line x1="945" y1="540" x2="1145" y2="540" stroke="#701a75" stroke-width="1" />
+  <text x="945" y="556" fill="#fdf4ff" font-family="sans-serif" font-size="8.5">&#8226; Apache Iceberg on Parquet (ZSTD)</text>
+  <text x="945" y="571" fill="#fdf4ff" font-family="sans-serif" font-size="8.5">&#8226; Bit-for-bit Deterministic Replay</text>
+  <text x="945" y="586" fill="#fdf4ff" font-family="sans-serif" font-size="8.5">&#8226; Hourly Reconciliation Checksums</text>
+
+  <!-- Connectors to Compliance -->
+  <path d="M 875 385 L 900 385 L 900 420 L 929 420" fill="none" stroke="#c084fc" stroke-width="1.5" marker-end="url(#arrowPurple)"/>
+  <line x1="1045" y1="480" x2="1045" y2="489" stroke="#d8b4fe" stroke-width="1.5" marker-end="url(#arrowPurple)"/>
+
+  <!-- REGION 5: Enterprise Observability & Telemetry (Bottom Full Strip) -->
+  <rect x="35" y="625" width="1135" height="135" rx="8" fill="#090d16" stroke="#0284c7" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="35" y="625" width="1135" height="26" rx="8" fill="#0369a1" />
+  <text x="600" y="642" fill="#f0f9ff" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Enterprise Unified Observability, Telemetry &amp; SLO Management Layer (OpenTelemetry Standard)</text>
+
+  <!-- Sub-components in Observability -->
+  <rect x="50" y="660" width="240" height="85" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="170" y="678" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Distributed Tracing (Tempo/Jaeger)</text>
+  <text x="60" y="696" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; W3C TraceContext Injected into Kafka</text>
+  <text x="60" y="711" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; End-to-end Span Propagation</text>
+  <text x="60" y="726" fill="#38bdf8" font-family="sans-serif" font-size="8" font-weight="700">&#8226; SLO: E2E P99 Latency &lt; 45ms</text>
+
+  <rect x="310" y="660" width="240" height="85" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+  <text x="430" y="678" fill="#34d399" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Metrics &amp; SLOs (Prometheus)</text>
+  <text x="320" y="696" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Transaction Throughput &amp; Error Rate</text>
+  <text x="320" y="711" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Kafka Consumer Lag &amp; Pod Saturation</text>
+  <text x="320" y="726" fill="#34d399" font-family="sans-serif" font-size="8" font-weight="700">&#8226; SLO: Pipeline Availability &gt;= 99.99%</text>
+
+  <rect x="570" y="660" width="240" height="85" rx="6" fill="#1e293b" stroke="#fb923c" stroke-width="1"/>
+  <text x="690" y="678" fill="#fb923c" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Centralized Logging (Loki)</text>
+  <text x="580" y="696" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; JSON Structured Logs with trace_id</text>
+  <text x="580" y="711" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; FluentBit Agent on K8s DaemonSets</text>
+  <text x="580" y="726" fill="#fb923c" font-family="sans-serif" font-size="8" font-weight="700">&#8226; PII &amp; PAN Data Masked at Ingress</text>
+
+  <rect x="830" y="660" width="325" height="85" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+  <text x="992" y="678" fill="#c084fc" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Cross-Pillar Correlation &amp; Grafana</text>
+  <text x="840" y="696" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Prometheus Exemplars link Metric Spike -&gt; Trace ID</text>
+  <text x="840" y="711" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Single Click Jump: Trace Waterfall -&gt; Microservice Logs</text>
+  <text x="840" y="726" fill="#c084fc" font-family="sans-serif" font-size="8" font-weight="700">&#8226; Automated PagerDuty &amp; Slack Alerting Integrations</text>
+
+</svg>
+    </div>
+    <div class="diagram-caption">
+      <strong>Figure 1: Solution Architecture Diagram (C4 Container View)</strong> &mdash; Microservices mesh, Apache Kafka event backbone, Redis state cache, Triton inference cluster, Analyst BFF, and WORM compliance lakehouse.
+    </div>
+  </div>
+
+  <div class="diagram-wrapper page-break-before">
+    <div class="diagram-container">
+      <svg viewBox="0 0 1200 750" width="100%" height="750" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <filter id="shadow2" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <marker id="arBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arOrange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#fb923c"/>
+    </marker>
+    <marker id="arGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+    <marker id="arRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#f87171"/>
+    </marker>
+    <marker id="arPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="750" fill="url(#bgGrad2)" rx="12" />
+  <rect x="15" y="15" width="1170" height="720" fill="none" stroke="#334155" stroke-width="1.5" rx="10" />
+
+  <!-- Title -->
+  <text x="35" y="48" fill="#f8fafc" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Figure 2: Event-Driven Messaging Backbone &amp; Exactly-Once Scaling Architecture</text>
+  <text x="35" y="70" fill="#94a3b8" font-family="'Segoe UI', Roboto, sans-serif" font-size="12">Topic Partitioning, CooperativeStickyAssignor, Consumer Offset Commit Protocols &amp; Rebalance State Management</text>
+
+  <!-- COLUMN 1: Producers (Left) -->
+  <rect x="35" y="95" width="190" height="520" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1" filter="url(#shadow2)"/>
+  <rect x="35" y="95" width="190" height="32" rx="8" fill="#334155"/>
+  <text x="130" y="116" fill="#f1f5f9" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Event Producers</text>
+
+  <!-- Producer 1 -->
+  <rect x="45" y="140" width="170" height="75" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.2"/>
+  <text x="130" y="165" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Ingestion Gateway</text>
+  <text x="130" y="183" fill="#94a3b8" font-family="sans-serif" font-size="8.5" text-anchor="middle">HTTP/gRPC Ingress Pods</text>
+  <text x="130" y="199" fill="#38bdf8" font-family="monospace" font-size="8.5" text-anchor="middle">Idempotent Producer (acks=all)</text>
+
+  <!-- Producer 2 -->
+  <rect x="45" y="240" width="170" height="75" rx="6" fill="#0f172a" stroke="#34d399" stroke-width="1.2"/>
+  <text x="130" y="265" fill="#34d399" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Feature Aggregator</text>
+  <text x="130" y="283" fill="#94a3b8" font-family="sans-serif" font-size="8.5" text-anchor="middle">Flink Stream Processor</text>
+  <text x="130" y="299" fill="#34d399" font-family="monospace" font-size="8.5" text-anchor="middle">Transactional Producer ID</text>
+
+  <!-- Producer 3 -->
+  <rect x="45" y="340" width="170" height="75" rx="6" fill="#0f172a" stroke="#f87171" stroke-width="1.2"/>
+  <text x="130" y="365" fill="#f87171" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Fraud Scoring Engine</text>
+  <text x="130" y="383" fill="#94a3b8" font-family="sans-serif" font-size="8.5" text-anchor="middle">Triton Inference Ensemble</text>
+  <text x="130" y="399" fill="#f87171" font-family="monospace" font-size="8.5" text-anchor="middle">Transactional ID (EOS Hop)</text>
+
+  <!-- Producer 4 -->
+  <rect x="45" y="440" width="170" height="75" rx="6" fill="#0f172a" stroke="#c084fc" stroke-width="1.2"/>
+  <text x="130" y="465" fill="#c084fc" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Case Mgmt / Analyst UI</text>
+  <text x="130" y="483" fill="#94a3b8" font-family="sans-serif" font-size="8.5" text-anchor="middle">BFF / Analyst Action API</text>
+  <text x="130" y="499" fill="#c084fc" font-family="monospace" font-size="8.5" text-anchor="middle">Atomic DB Sink Commits</text>
+
+  <!-- Producer 5 -->
+  <rect x="45" y="535" width="170" height="65" rx="6" fill="#0f172a" stroke="#e879f9" stroke-width="1.2"/>
+  <text x="130" y="560" fill="#e879f9" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Replay Coordinator</text>
+  <text x="130" y="578" fill="#94a3b8" font-family="sans-serif" font-size="8.5" text-anchor="middle">Historical Backtest Injector</text>
+
+  <!-- COLUMN 2: Apache Kafka Topic Topology (Center) -->
+  <rect x="250" y="95" width="480" height="520" rx="8" fill="#0b1329" stroke="#f59e0b" stroke-width="1.5" filter="url(#shadow2)"/>
+  <rect x="250" y="95" width="480" height="32" rx="8" fill="#78350f"/>
+  <text x="490" y="116" fill="#fef3c7" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Apache Kafka Topic Topology (32 Partitions | Key: account_id | acks=all)</text>
+
+  <!-- Topic 1 -->
+  <rect x="265" y="135" width="450" height="80" rx="6" fill="#1e293b" stroke="#fb923c" stroke-width="1.2"/>
+  <text x="280" y="155" fill="#fb923c" font-family="monospace" font-size="10.5" font-weight="700">Topic: financial.trans.received.v1</text>
+  <text x="695" y="155" fill="#94a3b8" font-family="sans-serif" font-size="8.5" text-anchor="end">Partitions: 32 | Retention: 7d</text>
+  <text x="280" y="172" fill="#cbd5e1" font-family="sans-serif" font-size="8">Payload: Raw transaction message, ISO 20022 fields, tokenized PAN, timestamp, channel, IP, device</text>
+  <text x="280" y="187" fill="#94a3b8" font-family="monospace" font-size="7.5">Key: transaction.account_id | Schema: Avro ID: 1042 (Schema Registry)</text>
+  <rect x="280" y="193" width="220" height="15" rx="3" fill="#334155"/>
+  <text x="285" y="204" fill="#f8fafc" font-family="monospace" font-size="7.5">DLQ: financial.trans.received.dlq</text>
+
+  <!-- Topic 2 -->
+  <rect x="265" y="225" width="450" height="80" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1.2"/>
+  <text x="280" y="245" fill="#34d399" font-family="monospace" font-size="10.5" font-weight="700">Topic: financial.trans.enriched.v1</text>
+  <text x="695" y="245" fill="#94a3b8" font-family="sans-serif" font-size="8.5" text-anchor="end">Partitions: 32 | Retention: 3d</text>
+  <text x="280" y="262" fill="#cbd5e1" font-family="sans-serif" font-size="8">Payload: Raw payload + 5m/1h velocity counters, rolling sums, geo-distance velocity, risk flags</text>
+  <text x="280" y="277" fill="#94a3b8" font-family="monospace" font-size="7.5">Key: transaction.account_id | Schema: Avro ID: 1043</text>
+  <rect x="280" y="283" width="220" height="15" rx="3" fill="#334155"/>
+  <text x="285" y="294" fill="#f8fafc" font-family="monospace" font-size="7.5">DLQ: financial.trans.enriched.dlq</text>
+
+  <!-- Topic 3 -->
+  <rect x="265" y="315" width="450" height="80" rx="6" fill="#1e293b" stroke="#f87171" stroke-width="1.2"/>
+  <text x="280" y="335" fill="#f87171" font-family="monospace" font-size="10.5" font-weight="700">Topic: financial.fraud.evaluated.v1</text>
+  <text x="695" y="335" fill="#94a3b8" font-family="sans-serif" font-size="8.5" text-anchor="end">Partitions: 32 | Retention: 7d</text>
+  <text x="280" y="352" fill="#cbd5e1" font-family="sans-serif" font-size="8">Payload: Evaluation verdict (ALLOW / CHALLENGE / BLOCK), score [0.0-1.0], SHAP feature contributions</text>
+  <text x="280" y="367" fill="#94a3b8" font-family="monospace" font-size="7.5">Key: transaction.transaction_id | Schema: Avro ID: 1044</text>
+  <rect x="280" y="373" width="220" height="15" rx="3" fill="#334155"/>
+  <text x="285" y="384" fill="#f8fafc" font-family="monospace" font-size="7.5">DLQ: financial.fraud.evaluated.dlq</text>
+
+  <!-- Topic 4 -->
+  <rect x="265" y="405" width="450" height="80" rx="6" fill="#1e293b" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="280" y="425" fill="#ef4444" font-family="monospace" font-size="10.5" font-weight="700">Topic: financial.fraud.alert.v1</text>
+  <text x="695" y="425" fill="#fca5a5" font-family="sans-serif" font-size="8.5" text-anchor="end">Partitions: 16 | Retention: 14d</text>
+  <text x="280" y="442" fill="#cbd5e1" font-family="sans-serif" font-size="8">Payload: High-confidence fraud alert (score &gt;= 0.75), alert priority (P1/P2/P3), top explainability drivers</text>
+  <text x="280" y="457" fill="#94a3b8" font-family="monospace" font-size="7.5">Key: transaction.account_id | Schema: Avro ID: 1045</text>
+  <rect x="280" y="463" width="220" height="15" rx="3" fill="#334155"/>
+  <text x="285" y="474" fill="#f8fafc" font-family="monospace" font-size="7.5">DLQ: financial.fraud.alert.dlq</text>
+
+  <!-- Topic 5: Replay & Case -->
+  <rect x="265" y="495" width="450" height="80" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1.2"/>
+  <text x="280" y="515" fill="#c084fc" font-family="monospace" font-size="10.5" font-weight="700">Topic: compliance.trans.replay.v1 &amp; case.events.v1</text>
+  <text x="695" y="515" fill="#94a3b8" font-family="sans-serif" font-size="8.5" text-anchor="end">Partitions: 32 | Isolated Shadow</text>
+  <text x="280" y="532" fill="#cbd5e1" font-family="sans-serif" font-size="8">Payload: Replayed historical transaction packets; Case disposition changes (Analyst CONFIRMED / FALSE_POS)</text>
+  <text x="280" y="547" fill="#94a3b8" font-family="monospace" font-size="7.5">Key: account_id / case_id | Strict isolation from live production metrics</text>
+
+  <!-- Producer to Topic Arrows -->
+  <line x1="215" y1="175" x2="260" y2="175" stroke="#fb923c" stroke-width="2" marker-end="url(#arOrange)"/>
+  <line x1="215" y1="265" x2="260" y2="265" stroke="#34d399" stroke-width="2" marker-end="url(#arGreen)"/>
+  <line x1="215" y1="365" x2="260" y2="365" stroke="#f87171" stroke-width="2" marker-end="url(#arRed)"/>
+  <line x1="215" y1="475" x2="260" y2="535" stroke="#c084fc" stroke-width="2" marker-end="url(#arPurple)"/>
+  <line x1="215" y1="565" x2="260" y2="545" stroke="#e879f9" stroke-width="2" marker-end="url(#arPurple)"/>
+
+  <!-- COLUMN 3: Consumer Groups (Right) -->
+  <rect x="755" y="95" width="410" height="520" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1" filter="url(#shadow2)"/>
+  <rect x="755" y="95" width="410" height="32" rx="8" fill="#334155"/>
+  <text x="960" y="116" fill="#f1f5f9" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Consumer Groups &amp; Downstream Processors</text>
+
+  <!-- CG 1: Feature Aggregation -->
+  <rect x="770" y="135" width="380" height="80" rx="6" fill="#0f172a" stroke="#34d399" stroke-width="1.2"/>
+  <text x="785" y="155" fill="#34d399" font-family="sans-serif" font-size="10.5" font-weight="700">CG: feature-agg-group (CooperativeStickyAssignor)</text>
+  <text x="785" y="172" fill="#cbd5e1" font-family="sans-serif" font-size="8">Reads: trans.received.v1 | Sliding window state maintained in RocksDB / Redis</text>
+  <text x="785" y="187" fill="#94a3b8" font-family="sans-serif" font-size="8">EOS: sendOffsetsToTransaction() commits offsets atomically inside Kafka txn</text>
+  <text x="785" y="202" fill="#34d399" font-family="monospace" font-size="7.5">Scales: KEDA Consumer Lag &gt; 150 msgs/part | Zero stop-the-world pauses</text>
+
+  <!-- CG 2: Fraud Scoring Engine -->
+  <rect x="770" y="225" width="380" height="80" rx="6" fill="#0f172a" stroke="#f87171" stroke-width="1.2"/>
+  <text x="785" y="245" fill="#f87171" font-family="sans-serif" font-size="10.5" font-weight="700">CG: fraud-scoring-group (Transactional EOS Hop)</text>
+  <text x="785" y="262" fill="#cbd5e1" font-family="sans-serif" font-size="8">Reads: trans.enriched.v1 | Triton ML Ensemble (Dynamic Batch 2ms window)</text>
+  <text x="785" y="277" fill="#94a3b8" font-family="sans-serif" font-size="8">Rebalance: onPartitionsRevoked() drains in-flight inference; aborts uncommitted</text>
+  <text x="785" y="292" fill="#f87171" font-family="monospace" font-size="7.5">Zombie Fencing: Broker fences old pods via transactional.id &amp; epoch</text>
+
+  <!-- CG 3: Case Management BFF & Real-Time Alerting -->
+  <rect x="770" y="315" width="380" height="80" rx="6" fill="#0f172a" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="785" y="335" fill="#ef4444" font-family="sans-serif" font-size="10.5" font-weight="700">CG: case-management-group (Transactional Sink)</text>
+  <text x="785" y="352" fill="#cbd5e1" font-family="sans-serif" font-size="8">Reads: fraud.alert.v1 | Atomic Dual-Write: Case record + Kafka offset in PostgreSQL</text>
+  <text x="785" y="367" fill="#cbd5e1" font-family="sans-serif" font-size="8">Rebalance Seek: onPartitionsAssigned() queries DB offset table &amp; seeks deterministically</text>
+  <text x="785" y="382" fill="#ef4444" font-family="monospace" font-size="7.5">Guaranteed Outcome: Zero duplicate alerts, phantom cases, or dropped records</text>
+
+  <!-- CG 4: Downstream Action & Automated Enforcement -->
+  <rect x="770" y="405" width="380" height="80" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.2"/>
+  <text x="785" y="425" fill="#38bdf8" font-family="sans-serif" font-size="10.5" font-weight="700">CG: downstream-action-group (8 Pods / Quarkus)</text>
+  <text x="785" y="442" fill="#cbd5e1" font-family="sans-serif" font-size="8">Reads: fraud.evaluated.v1 (Filtered for BLOCK/CHALLENGE decisions)</text>
+  <text x="785" y="457" fill="#cbd5e1" font-family="sans-serif" font-size="8">Idempotent Card Lock: Processor API uses transaction_id as idempotency key</text>
+  <text x="785" y="472" fill="#38bdf8" font-family="monospace" font-size="7.5">Execution SLA: &lt; 50ms | In-flight drain ensures no hold commands dropped</text>
+
+  <!-- CG 5: Compliance Lakehouse Archival & Replay -->
+  <rect x="770" y="495" width="380" height="80" rx="6" fill="#0f172a" stroke="#c084fc" stroke-width="1.2"/>
+  <text x="785" y="515" fill="#c084fc" font-family="sans-serif" font-size="10.5" font-weight="700">CG: compliance-archiver-group &amp; shadow-replay</text>
+  <text x="785" y="532" fill="#cbd5e1" font-family="sans-serif" font-size="8">Reads ALL Topics | Streams batches into S3/GCS Object Lock WORM storage</text>
+  <text x="785" y="547" fill="#cbd5e1" font-family="sans-serif" font-size="8">Shadow Replay Group consumes trans.replay.v1 without mutating production</text>
+  <text x="785" y="562" fill="#c084fc" font-family="monospace" font-size="7.5">Compliance Retention: 7 Years WORM (BCBS 239) | Checksum Parity &Delta; = 0</text>
+
+  <!-- Topic to CG Connectors -->
+  <line x1="715" y1="175" x2="765" y2="175" stroke="#34d399" stroke-width="2" marker-end="url(#arGreen)"/>
+  <line x1="715" y1="265" x2="765" y2="265" stroke="#f87171" stroke-width="2" marker-end="url(#arRed)"/>
+  <line x1="715" y1="445" x2="765" y2="355" stroke="#ef4444" stroke-width="2" marker-end="url(#arRed)"/>
+  <line x1="715" y1="355" x2="765" y2="445" stroke="#38bdf8" stroke-width="2" marker-end="url(#arBlue)"/>
+  <line x1="715" y1="535" x2="765" y2="535" stroke="#c084fc" stroke-width="2" marker-end="url(#arPurple)"/>
+
+  <!-- HORIZONTAL EXACTLY-ONCE SCALING PROTOCOL BANNER (Bottom) -->
+  <rect x="35" y="625" width="1130" height="100" rx="8" fill="#18182f" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow2)"/>
+  <rect x="35" y="625" width="1130" height="24" rx="8" fill="#0369a1"/>
+  <text x="600" y="641" fill="#f0f9ff" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">EXACTLY-ONCE HORIZONTAL SCALING &amp; CONSUMER REBALANCE PROTOCOL LIFECYCLE</text>
+
+  <rect x="50" y="655" width="265" height="60" rx="5" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="182" y="672" fill="#38bdf8" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">1. Cooperative Sticky Assignor</text>
+  <text x="60" y="688" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; KEDA triggers pod scale-out (Lag &gt; 150)</text>
+  <text x="60" y="702" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Revokes ONLY migrated partitions</text>
+
+  <rect x="330" y="655" width="270" height="60" rx="5" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+  <text x="465" y="672" fill="#34d399" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">2. ConsumerRebalanceListener</text>
+  <text x="340" y="688" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; onPartitionsRevoked(): In-flight drain</text>
+  <text x="340" y="702" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; commitSync() flushes last processed offset</text>
+
+  <rect x="615" y="655" width="265" height="60" rx="5" fill="#1e293b" stroke="#f87171" stroke-width="1"/>
+  <text x="747" y="672" fill="#f87171" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">3. Stream Hops: Transactional EOS</text>
+  <text x="625" y="688" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; sendOffsetsToTransaction() in Kafka txn</text>
+  <text x="625" y="702" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Aborts mid-batch; broker zombie fencing</text>
+
+  <rect x="895" y="655" width="255" height="60" rx="5" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+  <text x="1022" y="672" fill="#c084fc" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">4. Sink Services: Atomic DB Commits</text>
+  <text x="905" y="688" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Dual-write: Case record + Offset in PostgreSQL</text>
+  <text x="905" y="702" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; onPartitionsAssigned() seeks from DB table</text>
+
+</svg>
+    </div>
+    <div class="diagram-caption">
+      <strong>Figure 2: Event-Driven Messaging Backbone &amp; Exactly-Once Scaling Architecture</strong> &mdash; 32 partitions per topic, partition key routing by account_id, schema registry governance, CooperativeStickyAssignor, ConsumerRebalanceListeners, and atomic offset commit protocols.
+    </div>
+  </div>
+
+  <div class="diagram-wrapper page-break-before">
+    <div class="diagram-container">
+      <svg viewBox="0 0 1200 800" width="100%" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <marker id="sqArBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="sqArGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+    <marker id="sqArRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#f87171"/>
+    </marker>
+    <marker id="sqArPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#bgGrad3)" rx="12" />
+  <rect x="15" y="15" width="1170" height="770" fill="none" stroke="#334155" stroke-width="1.5" rx="10" />
+
+  <!-- Title -->
+  <text x="35" y="46" fill="#f8fafc" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Figure 3: End-to-End Transaction Flow &amp; Classification Journey</text>
+  <text x="35" y="68" fill="#94a3b8" font-family="'Segoe UI', Roboto, sans-serif" font-size="12">Sequence Diagram: Ingestion, Streaming Feature Enrichment, Triton ML Scoring, Real-time Analyst Alerting, and WORM Audit</text>
+
+  <!-- Lifeline Columns (Headers) -->
+  <!-- 1. Client / Rail -->
+  <rect x="40" y="85" width="105" height="40" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="92" y="105" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Payment Rail</text>
+  <text x="92" y="118" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Visa / FedNow</text>
+  <line x1="92" y1="125" x2="92" y2="760" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 2. Gateway -->
+  <rect x="160" y="85" width="105" height="40" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="212" y="105" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">API Gateway</text>
+  <text x="212" y="118" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Envoy / WAF</text>
+  <line x1="212" y1="125" x2="212" y2="760" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 3. Ingestion Svc -->
+  <rect x="280" y="85" width="105" height="40" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="332" y="105" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Ingestion Svc</text>
+  <text x="332" y="118" fill="#94a3b8" font-family="monospace" font-size="8" text-anchor="middle">Go 1.23</text>
+  <line x1="332" y1="125" x2="332" y2="760" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 4. Kafka Event Backbone -->
+  <rect x="400" y="85" width="115" height="40" rx="6" fill="#78350f" stroke="#fb923c" stroke-width="1"/>
+  <text x="457" y="105" fill="#fef3c7" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Apache Kafka</text>
+  <text x="457" y="118" fill="#fed7aa" font-family="monospace" font-size="8" text-anchor="middle">Topics Backbone</text>
+  <line x1="457" y1="125" x2="457" y2="760" stroke="#78350f" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+  <!-- 5. Feature Agg & Redis -->
+  <rect x="530" y="85" width="115" height="40" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+  <text x="587" y="105" fill="#34d399" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Feature Aggregator</text>
+  <text x="587" y="118" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Flink + Redis L2</text>
+  <line x1="587" y1="125" x2="587" y2="760" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 6. Fraud Scoring Engine -->
+  <rect x="660" y="85" width="115" height="40" rx="6" fill="#1e293b" stroke="#f87171" stroke-width="1"/>
+  <text x="717" y="105" fill="#f87171" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Scoring Engine</text>
+  <text x="717" y="118" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Triton / XGBoost</text>
+  <line x1="717" y1="125" x2="717" y2="760" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 7. Case BFF -->
+  <rect x="790" y="85" width="105" height="40" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+  <text x="842" y="105" fill="#c084fc" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Case BFF Svc</text>
+  <text x="842" y="118" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Node.js + Postgres</text>
+  <line x1="842" y1="125" x2="842" y2="760" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 8. Analyst UI -->
+  <rect x="910" y="85" width="105" height="40" rx="6" fill="#0369a1" stroke="#38bdf8" stroke-width="1"/>
+  <text x="962" y="105" fill="#ffffff" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Analyst Console</text>
+  <text x="962" y="118" fill="#bae6fd" font-family="sans-serif" font-size="8" text-anchor="middle">React 19 / WSS</text>
+  <line x1="962" y1="125" x2="962" y2="760" stroke="#0369a1" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- 9. Compliance S3 WORM -->
+  <rect x="1030" y="85" width="125" height="40" rx="6" fill="#4c1d95" stroke="#d8b4fe" stroke-width="1"/>
+  <text x="1092" y="105" fill="#f5d0fe" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Compliance WORM</text>
+  <text x="1092" y="118" fill="#e9d5ff" font-family="sans-serif" font-size="8" text-anchor="middle">S3 Object Lock</text>
+  <line x1="1092" y1="125" x2="1092" y2="760" stroke="#4c1d95" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+  <!-- Sequence Steps -->
+
+  <!-- Step 1: Ingress POST -->
+  <line x1="92" y1="150" x2="210" y2="150" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#sqArBlue)"/>
+  <text x="151" y="143" fill="#e0f2fe" font-family="sans-serif" font-size="8.5" text-anchor="middle">1. POST /v1/trans (Auth, PAN, $5,400)</text>
+
+  <!-- Step 2: Gateway to Ingestion -->
+  <line x1="212" y1="175" x2="330" y2="175" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#sqArBlue)"/>
+  <text x="271" y="168" fill="#e0f2fe" font-family="sans-serif" font-size="8.5" text-anchor="middle">2. mTLS Validate &amp; Tokenize PAN</text>
+
+  <!-- Step 3: Ingestion publishes trans.raw.v1 -->
+  <line x1="332" y1="205" x2="455" y2="205" stroke="#fb923c" stroke-width="1.8" marker-end="url(#sqArBlue)"/>
+  <text x="393" y="198" fill="#fed7aa" font-family="sans-serif" font-size="8.5" text-anchor="middle">3. Produce trans.received.v1 (Key: Acct)</text>
+
+  <!-- Fast ACK to Payment Rail (Asynchronous Processing Path) -->
+  <line x1="332" y1="230" x2="214" y2="230" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#sqArBlue)"/>
+  <line x1="212" y1="235" x2="94" y2="235" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#sqArBlue)"/>
+  <text x="210" y="224" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">HTTP 202 Accepted (Async Deep Scoring Path &lt; 4ms)</text>
+
+  <!-- Step 4: Compliance captures raw event -->
+  <path d="M 457 245 L 490 245 L 490 260 L 1090 260" fill="none" stroke="#d8b4fe" stroke-width="1.2" stroke-dasharray="2,2" marker-end="url(#sqArPurple)"/>
+  <text x="770" y="254" fill="#e9d5ff" font-family="sans-serif" font-size="8" text-anchor="middle">4. WORM Audit Sink persists raw transaction to S3 Object Lock (Immutable 7-Yr Record)</text>
+
+  <!-- Step 5: Feature Aggregator consumes raw -->
+  <line x1="457" y1="285" x2="585" y2="285" stroke="#fb923c" stroke-width="1.5" marker-end="url(#sqArGreen)"/>
+  <text x="522" y="278" fill="#fed7aa" font-family="sans-serif" font-size="8.5" text-anchor="middle">5. Consume trans.received.v1</text>
+
+  <!-- Activation: Feature lookup in Redis -->
+  <rect x="582" y="295" width="10" height="40" fill="#34d399" rx="2"/>
+  <path d="M 592 305 C 625 305 625 325 594 325" fill="none" stroke="#34d399" stroke-width="1.2"/>
+  <text x="635" y="318" fill="#a7f3d0" font-family="sans-serif" font-size="8">L2 Redis Lookup (Velocity, Geo-Diff &lt; 2ms)</text>
+
+  <!-- Step 6: Produce trans.enriched.v1 -->
+  <line x1="587" y1="350" x2="459" y2="350" stroke="#34d399" stroke-width="1.8" marker-end="url(#sqArGreen)"/>
+  <text x="523" y="343" fill="#a7f3d0" font-family="sans-serif" font-size="8.5" text-anchor="middle">6. Produce trans.enriched.v1</text>
+
+  <!-- Step 7: Fraud Scoring Engine consumes enriched -->
+  <line x1="457" y1="380" x2="715" y2="380" stroke="#34d399" stroke-width="1.5" marker-end="url(#sqArRed)"/>
+  <text x="587" y="373" fill="#a7f3d0" font-family="sans-serif" font-size="8.5" text-anchor="middle">7. Consume trans.enriched.v1 (Partition-Aligned)</text>
+
+  <!-- Activation: Scoring Engine Inference -->
+  <rect x="712" y="390" width="10" height="55" fill="#f87171" rx="2"/>
+  <path d="M 722 400 C 765 400 765 435 724 435" fill="none" stroke="#f87171" stroke-width="1.2"/>
+  <text x="775" y="410" fill="#fca5a5" font-family="sans-serif" font-size="8">Triton Inference Server (LightGBM + DNN)</text>
+  <text x="775" y="423" fill="#fca5a5" font-family="sans-serif" font-size="8">Score: 0.94 (HIGH RISK) | SHAP Top: Foreign IP, $ Velocity</text>
+
+  <!-- Step 8: Produce fraud.evaluated.v1 & fraud.alert.v1 -->
+  <line x1="717" y1="460" x2="459" y2="460" stroke="#f87171" stroke-width="1.8" marker-end="url(#sqArRed)"/>
+  <text x="588" y="453" fill="#fca5a5" font-family="sans-serif" font-size="8.5" text-anchor="middle">8. Produce fraud.evaluated.v1 &amp; fraud.alert.v1 (Score &gt;= 0.75)</text>
+
+  <!-- Step 9: Downstream Action triggers automated card lock -->
+  <path d="M 457 480 L 150 480 L 150 505 L 94 505" fill="none" stroke="#f87171" stroke-width="1.5" marker-end="url(#sqArRed)"/>
+  <text x="270" y="497" fill="#fca5a5" font-family="sans-serif" font-size="8" text-anchor="middle">9. Automated Pre-Emptive Card Freeze &amp; SMS Challenge</text>
+
+  <!-- Step 10: Case BFF consumes fraud.alert.v1 -->
+  <line x1="457" y1="530" x2="840" y2="530" stroke="#ef4444" stroke-width="1.8" marker-end="url(#sqArPurple)"/>
+  <text x="650" y="523" fill="#fca5a5" font-family="sans-serif" font-size="8.5" text-anchor="middle">10. Consume fraud.alert.v1 (Insert Case into PostgreSQL)</text>
+
+  <!-- Step 11: BFF pushes alert to Analyst via WebSocket -->
+  <line x1="842" y1="560" x2="960" y2="560" stroke="#38bdf8" stroke-width="2" marker-end="url(#sqArBlue)"/>
+  <text x="901" y="552" fill="#38bdf8" font-family="sans-serif" font-size="8.5" font-weight="700" text-anchor="middle">11. WSS Push Alert (Frame: Latency &lt; 200ms)</text>
+
+  <!-- Step 12: Analyst UI renders alert -->
+  <rect x="957" y="570" width="10" height="60" fill="#0284c7" rx="2"/>
+  <text x="975" y="585" fill="#e0f2fe" font-family="sans-serif" font-size="8">Analyst Console: Highlight High-Risk Alert</text>
+  <text x="975" y="600" fill="#e0f2fe" font-family="sans-serif" font-size="8">SHAP Radar Chart + Geo-Discrepancy View</text>
+  <text x="975" y="615" fill="#fca5a5" font-family="sans-serif" font-size="8" font-weight="700">Analyst Clicks: [CONFIRM FRAUD &amp; BLOCK]</text>
+
+  <!-- Step 13: Analyst Action POST to BFF -->
+  <line x1="962" y1="640" x2="844" y2="640" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#sqArBlue)"/>
+  <text x="903" y="633" fill="#e0f2fe" font-family="sans-serif" font-size="8.5" text-anchor="middle">13. POST /v1/cases/1042/disposition (Confirmed)</text>
+
+  <!-- Step 14: BFF updates Case DB & Emits case.updated.v1 -->
+  <line x1="842" y1="670" x2="459" y2="670" stroke="#c084fc" stroke-width="1.8" marker-end="url(#sqArPurple)"/>
+  <text x="650" y="663" fill="#e9d5ff" font-family="sans-serif" font-size="8.5" text-anchor="middle">14. Produce case.updated.v1 (Analyst Disposition Logged)</text>
+
+  <!-- Step 15: Compliance archives complete case outcome -->
+  <path d="M 457 690 L 490 690 L 490 710 L 1090 710" fill="none" stroke="#d8b4fe" stroke-width="1.5" marker-end="url(#sqArPurple)"/>
+  <text x="770" y="703" fill="#e9d5ff" font-family="sans-serif" font-size="8" text-anchor="middle">15. Final Case Lifecycle Audit Manifest committed to WORM S3 (Full Audit Trail Complete)</text>
+
+  <!-- Latency Box Summary across bottom -->
+  <rect x="40" y="725" width="1120" height="40" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="600" y="742" fill="#38bdf8" font-family="sans-serif" font-size="9" font-weight="700" text-anchor="middle">LATENCY BUDGET RECONCILIATION (P99 TARGET: &lt; 45ms Scoring | &lt; 200ms Analyst Push)</text>
+  <text x="600" y="756" fill="#cbd5e1" font-family="sans-serif" font-size="8" text-anchor="middle">Ingress &amp; Tokenize: 4ms | Kafka Network Pub: 2ms | Flink Feature Window &amp; Redis: 6ms | Triton Ensemble ML: 12ms | Alert Pub &amp; WSS Push: 14ms | Total E2E: ~38ms</text>
+
+</svg>
+    </div>
+    <div class="diagram-caption">
+      <strong>Figure 3: End-to-End Transaction Flow Sequence Diagram</strong> &mdash; Millisecond-by-millisecond transaction journey through ingestion, feature enrichment, Triton ML classification, automated enforcement, analyst WebSocket push, and WORM audit.
+    </div>
+  </div>
+
+  <div class="diagram-wrapper page-break-before">
+    <div class="diagram-container">
+      <svg viewBox="0 0 1200 680" width="100%" height="680" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <filter id="shadow4" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <marker id="feArBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="feArPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#c084fc"/>
+    </marker>
+    <marker id="feArGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="680" fill="url(#bgGrad4)" rx="12" />
+  <rect x="15" y="15" width="1170" height="650" fill="none" stroke="#334155" stroke-width="1.5" rx="10" />
+
+  <!-- Title -->
+  <text x="35" y="48" fill="#f8fafc" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Figure 4: Fraud Analyst Console &amp; Backend-for-Frontend (BFF) Architecture</text>
+  <text x="35" y="70" fill="#94a3b8" font-family="'Segoe UI', Roboto, sans-serif" font-size="12">High-Frequency WebSocket Streaming, Virtualized DOM Recycling, Optimistic UI State &amp; Explainable AI (SHAP)</text>
+
+  <!-- SECTION 1: Client Browser Application (Left Half) -->
+  <rect x="35" y="95" width="530" height="550" rx="8" fill="#111827" stroke="#0ea5e9" stroke-width="1.5" filter="url(#shadow4)"/>
+  <rect x="35" y="95" width="530" height="32" rx="8" fill="#0284c7"/>
+  <text x="300" y="116" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Analyst Single Page Application (React 19 / Next.js 15)</text>
+
+  <!-- UI Sub-blocks -->
+  <!-- 1. Real-time WebSocket Client -->
+  <rect x="50" y="145" width="230" height="110" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="165" y="167" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">WebSocket / SSE Client</text>
+  <text x="60" y="187" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; STOMP over WSS Protocol</text>
+  <text x="60" y="202" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Heartbeat &amp; Exponential Reconnect</text>
+  <text x="60" y="217" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Priority Alert Multiplexing</text>
+  <text x="60" y="232" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Backpressure Throttle Buffer</text>
+
+  <!-- 2. TanStack Query & Zustand State -->
+  <rect x="300" y="145" width="245" height="110" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+  <text x="422" y="167" fill="#34d399" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">State Management &amp; Cache</text>
+  <text x="310" y="187" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; TanStack Query v5 (Server State)</text>
+  <text x="310" y="202" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Optimistic UI Updates on Action</text>
+  <text x="310" y="217" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Zustand Store (Active Filter / Selection)</text>
+  <text x="310" y="232" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; IndexedDB Persistence for Offline Drafts</text>
+
+  <!-- 3. Virtualized Alert Grid -->
+  <rect x="50" y="275" width="495" height="140" rx="6" fill="#1e293b" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="297" y="297" fill="#fb923c" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">DOM-Virtualized Alert Grid (TanStack Virtual)</text>
+  <rect x="65" y="310" width="465" height="24" rx="4" fill="#334155"/>
+  <text x="75" y="326" fill="#f8fafc" font-family="monospace" font-size="8.5">ALERT ID | TIMESTAMP | ACCOUNT | RISK | AMOUNT | STATUS | ACTION</text>
+  <rect x="65" y="338" width="465" height="20" rx="3" fill="#450a0a"/>
+  <text x="75" y="352" fill="#fca5a5" font-family="monospace" font-size="8">#ALT-9041 | 12:44:01.02 | AC-89104 | 0.94 | $5,400 | CRITICAL | [DISPATCH]</text>
+  <rect x="65" y="362" width="465" height="20" rx="3" fill="#1e293b"/>
+  <text x="75" y="376" fill="#fed7aa" font-family="monospace" font-size="8">#ALT-9040 | 12:43:58.89 | AC-11209 | 0.82 | $1,250 | HIGH     | [REVIEW]</text>
+  <text x="297" y="402" fill="#94a3b8" font-family="sans-serif" font-size="8.5" text-anchor="middle">Recycles 20 visible DOM elements from an in-memory queue of 15,000+ alerts (60 FPS scrolling)</text>
+
+  <!-- 4. Web Worker for Background Compute -->
+  <rect x="50" y="435" width="230" height="95" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+  <text x="165" y="455" fill="#c084fc" font-family="sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">Dedicated Web Worker</text>
+  <text x="60" y="475" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Client-side Fuzzy Search &amp; Filter</text>
+  <text x="60" y="490" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Risk Score Histogram Bucketing</text>
+  <text x="60" y="505" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Zero Main-Thread Jank / Freeze</text>
+
+  <!-- 5. Explainable AI & Action Bar -->
+  <rect x="300" y="435" width="245" height="95" rx="6" fill="#1e293b" stroke="#f87171" stroke-width="1"/>
+  <text x="422" y="455" fill="#f87171" font-family="sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">Explainability (SHAP) View</text>
+  <text x="310" y="475" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; SHAP Waterfall / Feature Radar</text>
+  <text x="310" y="490" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; IP Geolocation vs Previous 24h</text>
+  <text x="310" y="505" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; 1-Click Triage: [Freeze] [Whitelist]</text>
+
+  <!-- Client-side connectivity status -->
+  <rect x="50" y="550" width="495" height="35" rx="4" fill="#064e3b" stroke="#34d399" stroke-width="1"/>
+  <text x="297" y="572" fill="#a7f3d0" font-family="sans-serif" font-size="9" font-weight="700" text-anchor="middle">&#10003; WSS Connected: bff.internal.bank.com | Latency: 18ms | Active Channel: fraud-alerts-p1</text>
+
+  <!-- SECTION 2: Backend-for-Frontend (BFF) Gateway (Right Half) -->
+  <rect x="620" y="95" width="545" height="550" rx="8" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5" filter="url(#shadow4)"/>
+  <rect x="620" y="95" width="545" height="32" rx="8" fill="#4338ca"/>
+  <text x="892" y="116" fill="#e0e7ff" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Analyst BFF Gateway Tier (Node.js 22 / Fastify Cluster)</text>
+
+  <!-- BFF Sub-blocks -->
+  <!-- 1. WebSocket Gateway Hub -->
+  <rect x="640" y="145" width="240" height="110" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="760" y="167" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">WebSocket Connection Hub</text>
+  <text x="650" y="187" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Manages 500+ Concurrent Analysts</text>
+  <text x="650" y="202" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; STOMP Topic Subscriptions</text>
+  <text x="650" y="217" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Client Ping/Pong Heartbeats (10s)</text>
+  <text x="650" y="232" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Role-Based Topic Access Filter</text>
+
+  <!-- 2. Redis Pub/Sub Fanout -->
+  <rect x="905" y="145" width="240" height="110" rx="6" fill="#450a0a" stroke="#ef4444" stroke-width="1"/>
+  <text x="1025" y="167" fill="#fca5a5" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Redis Pub/Sub Fanout Hub</text>
+  <text x="915" y="187" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Synchronizes Horizontal BFF Pods</text>
+  <text x="915" y="202" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Broadcasts Alerts across all Nodes</text>
+  <text x="915" y="217" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Analyst Presence &amp; Active Locks</text>
+  <text x="915" y="232" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Sub-millisecond Relay Latency</text>
+
+  <!-- 3. Data Aggregator & ViewModel Transformer -->
+  <rect x="640" y="275" width="505" height="110" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1.2"/>
+  <text x="892" y="297" fill="#34d399" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Data Aggregation &amp; ViewModel Transformer</text>
+  <text x="655" y="320" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Merges Kafka Alert Event + PostgreSQL Case History + Customer CRM Dossier + Device Fingerprint</text>
+  <text x="655" y="337" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Eliminates Over-fetching: Serves tailored GraphQL / REST payloads strictly required by the UI view</text>
+  <text x="655" y="354" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Response Compression (Brotli / Gzip) &amp; ETag HTTP Caching for static reference datasets</text>
+  <text x="655" y="371" fill="#34d399" font-family="monospace" font-size="8">Saves 70% Bandwidth vs Raw Microservice Entity Exposure</text>
+
+  <!-- 4. Case Management Store & Kafka Link -->
+  <rect x="640" y="405" width="240" height="120" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1"/>
+  <text x="760" y="425" fill="#c084fc" font-family="sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">Kafka Alert Consumer</text>
+  <text x="650" y="445" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Consumes: fraud.alert.v1</text>
+  <text x="650" y="460" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Deserializes Avro Payload</text>
+  <text x="650" y="475" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Publishes: case.updated.v1</text>
+  <text x="650" y="490" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Enforces Strict Idempotency</text>
+  <text x="650" y="505" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Emits Audit Metric Telemetry</text>
+
+  <!-- 5. PostgreSQL Case Database -->
+  <rect x="905" y="405" width="240" height="120" rx="6" fill="#1e293b" stroke="#818cf8" stroke-width="1"/>
+  <text x="1025" y="425" fill="#c7d2fe" font-family="sans-serif" font-size="10.5" font-weight="700" text-anchor="middle">PostgreSQL Case Store</text>
+  <text x="915" y="445" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Case Entity &amp; State Machine</text>
+  <text x="915" y="460" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Analyst Notes &amp; Disposition Log</text>
+  <text x="915" y="475" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Multi-AZ Aurora Read Replicas</text>
+  <text x="915" y="490" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Partitioned by created_month</text>
+  <text x="915" y="505" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Connection Pooling (PgBouncer)</text>
+
+  <!-- Security & RBAC Footer -->
+  <rect x="640" y="550" width="505" height="35" rx="4" fill="#312e81" stroke="#818cf8" stroke-width="1"/>
+  <text x="892" y="572" fill="#e0e7ff" font-family="sans-serif" font-size="9" font-weight="700" text-anchor="middle">Zero-Trust RBAC: OIDC OAuth2 Token Validation | Analyst Session Audit Logged to SIEM</text>
+
+  <!-- Bidirectional Connection Between Client and BFF -->
+  <line x1="565" y1="200" x2="635" y2="200" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4,4" marker-end="url(#feArBlue)"/>
+  <line x1="635" y1="215" x2="565" y2="215" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4,4" marker-end="url(#feArBlue)"/>
+  <text x="600" y="190" fill="#38bdf8" font-family="sans-serif" font-size="8" text-anchor="middle">WSS / SSE</text>
+  <text x="600" y="235" fill="#34d399" font-family="sans-serif" font-size="8" text-anchor="middle">REST / GraphQL</text>
+
+</svg>
+    </div>
+    <div class="diagram-caption">
+      <strong>Figure 4: Fraud Analyst Console &amp; Backend-for-Frontend (BFF) Architecture</strong> &mdash; React 19 SPA, DOM virtualization (TanStack Virtual), Web Worker background computing, WebSocket push hub, and Redis Pub/Sub cluster fan-out.
+    </div>
+  </div>
+
+  <div class="diagram-wrapper page-break-before">
+    <div class="diagram-container">
+      <svg viewBox="0 0 1200 680" width="100%" height="680" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <filter id="shadow5" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <marker id="obArBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="obArGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+    <marker id="obArOrange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#fb923c"/>
+    </marker>
+    <marker id="obArPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="680" fill="url(#bgGrad5)" rx="12" />
+  <rect x="15" y="15" width="1170" height="650" fill="none" stroke="#334155" stroke-width="1.5" rx="10" />
+
+  <!-- Title -->
+  <text x="35" y="48" fill="#f8fafc" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Figure 5: Enterprise Observability &amp; Telemetry Correlation Architecture</text>
+  <text x="35" y="70" fill="#94a3b8" font-family="'Segoe UI', Roboto, sans-serif" font-size="12">Unified OpenTelemetry Pipeline, Cross-Pillar Correlation (Metrics -&gt; Exemplars -&gt; Traces -&gt; Logs) &amp; SLO Monitoring</text>
+
+  <!-- LAYER 1: Microservice Telemetry Sources (Top) -->
+  <rect x="35" y="95" width="1130" height="120" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.2" filter="url(#shadow5)"/>
+  <rect x="35" y="95" width="1130" height="26" rx="8" fill="#334155"/>
+  <text x="600" y="113" fill="#f1f5f9" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Instrumented Microservice Fleet (OpenTelemetry SDK | W3C TraceContext Injected into HTTP / gRPC / Kafka Record Headers)</text>
+
+  <!-- Service boxes across top -->
+  <rect x="50" y="130" width="165" height="70" rx="5" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="132" y="150" fill="#38bdf8" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Ingestion Gateway</text>
+  <text x="132" y="167" fill="#cbd5e1" font-family="monospace" font-size="8" text-anchor="middle">OTel Go SDK</text>
+  <text x="132" y="182" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Injects: traceparent</text>
+
+  <rect x="235" y="130" width="165" height="70" rx="5" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+  <text x="317" y="150" fill="#34d399" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Feature Aggregator</text>
+  <text x="317" y="167" fill="#cbd5e1" font-family="monospace" font-size="8" text-anchor="middle">OTel Java/Flink</text>
+  <text x="317" y="182" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Propagates Kafka Spans</text>
+
+  <rect x="420" y="130" width="165" height="70" rx="5" fill="#0f172a" stroke="#f87171" stroke-width="1"/>
+  <text x="502" y="150" fill="#f87171" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Scoring Engine</text>
+  <text x="502" y="167" fill="#cbd5e1" font-family="monospace" font-size="8" text-anchor="middle">OTel C++ / Python</text>
+  <text x="502" y="182" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Triton Inference Spans</text>
+
+  <rect x="605" y="130" width="165" height="70" rx="5" fill="#0f172a" stroke="#c084fc" stroke-width="1"/>
+  <text x="687" y="150" fill="#c084fc" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Case BFF Gateway</text>
+  <text x="687" y="167" fill="#cbd5e1" font-family="monospace" font-size="8" text-anchor="middle">OTel Node.js SDK</text>
+  <text x="687" y="182" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">WSS &amp; REST Traces</text>
+
+  <rect x="790" y="130" width="165" height="70" rx="5" fill="#0f172a" stroke="#e879f9" stroke-width="1"/>
+  <text x="872" y="150" fill="#e879f9" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Compliance &amp; Replay</text>
+  <text x="872" y="167" fill="#cbd5e1" font-family="monospace" font-size="8" text-anchor="middle">OTel Go / Spark</text>
+  <text x="872" y="182" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Iceberg Sink Audit Spans</text>
+
+  <rect x="975" y="130" width="175" height="70" rx="5" fill="#0f172a" stroke="#fb923c" stroke-width="1"/>
+  <text x="1062" y="150" fill="#fb923c" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">Kafka &amp; Infra Mesh</text>
+  <text x="1062" y="167" fill="#cbd5e1" font-family="monospace" font-size="8" text-anchor="middle">JMX / Istio Envoy</text>
+  <text x="1062" y="182" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Broker Metrics &amp; Lag</text>
+
+  <!-- LAYER 2: OpenTelemetry Collector Pipeline (Center Top) -->
+  <rect x="35" y="240" width="1130" height="95" rx="8" fill="#0c1e33" stroke="#0284c7" stroke-width="1.5" filter="url(#shadow5)"/>
+  <text x="600" y="260" fill="#38bdf8" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">OpenTelemetry Collector Pipeline (DaemonSet on Kubernetes Nodes + Regional Collector Gateways)</text>
+
+  <!-- Connectors from Services down to Collector -->
+  <line x1="132" y1="200" x2="132" y2="238" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#obArBlue)"/>
+  <line x1="317" y1="200" x2="317" y2="238" stroke="#34d399" stroke-width="1.5" marker-end="url(#obArGreen)"/>
+  <line x1="502" y1="200" x2="502" y2="238" stroke="#f87171" stroke-width="1.5" marker-end="url(#obArOrange)"/>
+  <line x1="687" y1="200" x2="687" y2="238" stroke="#c084fc" stroke-width="1.5" marker-end="url(#obArPurple)"/>
+  <line x1="872" y1="200" x2="872" y2="238" stroke="#e879f9" stroke-width="1.5" marker-end="url(#obArPurple)"/>
+  <line x1="1062" y1="200" x2="1062" y2="238" stroke="#fb923c" stroke-width="1.5" marker-end="url(#obArOrange)"/>
+
+  <!-- Collector Internals -->
+  <rect x="50" y="275" width="240" height="45" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <text x="170" y="295" fill="#38bdf8" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Receivers: OTLP gRPC / HTTP</text>
+  <text x="170" y="310" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Port 4317 / 4318, Zipkin, Prometheus</text>
+
+  <rect x="310" y="275" width="480" height="45" rx="4" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+  <text x="550" y="295" fill="#34d399" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Processors: Memory Limiter | Batching | PII Scrubbing (PAN / SSN Masking)</text>
+  <text x="550" y="310" fill="#cbd5e1" font-family="sans-serif" font-size="8" text-anchor="middle">Attribute Injection: env=prod, region=us-east-1, tenant_id=bank_core, k8s_pod</text>
+
+  <rect x="810" y="275" width="340" height="45" rx="4" fill="#1e293b" stroke="#fb923c" stroke-width="1"/>
+  <text x="980" y="295" fill="#fb923c" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Exporters: Fanout to 3 Pillars</text>
+  <text x="980" y="310" fill="#94a3b8" font-family="sans-serif" font-size="8" text-anchor="middle">Prometheus Remote Write | Tempo gRPC | Loki HTTP</text>
+
+  <!-- LAYER 3: The Three Specialized Telemetry Backends (Center Bottom) -->
+  <!-- Column 1: Metrics & SLOs (Prometheus) -->
+  <rect x="35" y="360" width="355" height="155" rx="8" fill="#1e293b" stroke="#34d399" stroke-width="1.5" filter="url(#shadow5)"/>
+  <rect x="35" y="360" width="355" height="26" rx="8" fill="#065f46"/>
+  <text x="212" y="378" fill="#d1fae5" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">PILLAR 1: Metrics TSDB (Prometheus / VictoriaMetrics)</text>
+  <text x="45" y="405" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Golden Signals: Latency, Traffic (1,000 TPS), Errors, Saturation</text>
+  <text x="45" y="422" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Kafka Consumer Lag &amp; Broker Disk IOPS</text>
+  <text x="45" y="439" fill="#34d399" font-family="sans-serif" font-size="8.5" font-weight="700">&#8226; SLO 1: P99 End-to-End Latency &lt; 45ms (Rolling 5m)</text>
+  <text x="45" y="456" fill="#34d399" font-family="sans-serif" font-size="8.5" font-weight="700">&#8226; SLO 2: Pipeline Error Rate &lt; 0.01% (99.99% Success)</text>
+  <rect x="45" y="468" width="335" height="36" rx="4" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+  <text x="212" y="482" fill="#a7f3d0" font-family="sans-serif" font-size="8.5" font-weight="700" text-anchor="middle">Exemplar Support: Attaches Trace ID directly</text>
+  <text x="212" y="496" fill="#a7f3d0" font-family="sans-serif" font-size="8" text-anchor="middle">to Histogram latency bucket data points</text>
+
+  <!-- Column 2: Distributed Tracing (Grafana Tempo) -->
+  <rect x="410" y="360" width="370" height="155" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow5)"/>
+  <rect x="410" y="360" width="370" height="26" rx="8" fill="#075985"/>
+  <text x="595" y="378" fill="#e0f2fe" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">PILLAR 2: Distributed Traces (Grafana Tempo / S3)</text>
+  <text x="420" y="405" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; End-to-End Trace Waterfall from Ingestion -&gt; Model -&gt; Alert</text>
+  <text x="420" y="422" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Captures Asynchronous Kafka Span Parent-Child Links</text>
+  <text x="420" y="439" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Cost-Effective Object Storage (S3) Backing (100% Sampling)</text>
+  <text x="420" y="456" fill="#38bdf8" font-family="sans-serif" font-size="8.5" font-weight="700">&#8226; Sub-second Trace Lookup by trace_id or transaction_id</text>
+  <rect x="420" y="468" width="350" height="36" rx="4" fill="#0f172a" stroke="#0284c7" stroke-width="1"/>
+  <text x="595" y="482" fill="#bae6fd" font-family="sans-serif" font-size="8.5" font-weight="700" text-anchor="middle">W3C TraceContext: traceparent &amp; tracestate</text>
+  <text x="595" y="496" fill="#bae6fd" font-family="sans-serif" font-size="8" text-anchor="middle">Embedded in Kafka Record Headers for Zero Context Loss</text>
+
+  <!-- Column 3: Centralized Logs (Grafana Loki) -->
+  <rect x="800" y="360" width="365" height="155" rx="8" fill="#1e293b" stroke="#fb923c" stroke-width="1.5" filter="url(#shadow5)"/>
+  <rect x="800" y="360" width="365" height="26" rx="8" fill="#9a3412"/>
+  <text x="982" y="378" fill="#ffedd5" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">PILLAR 3: Centralized Logs (Grafana Loki)</text>
+  <text x="810" y="405" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Structured JSON logs with auto-injected metadata</text>
+  <text x="810" y="422" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Indexed by Labels: app, env, pod, level, error_code</text>
+  <text x="810" y="439" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; PII-Cleaned: Card numbers truncated to last 4 digits</text>
+  <text x="810" y="456" fill="#fb923c" font-family="sans-serif" font-size="8.5" font-weight="700">&#8226; High-throughput Ingestion (FluentBit DaemonSet)</text>
+  <rect x="810" y="468" width="345" height="36" rx="4" fill="#0f172a" stroke="#ea580c" stroke-width="1"/>
+  <text x="982" y="482" fill="#fed7aa" font-family="sans-serif" font-size="8.5" font-weight="700" text-anchor="middle">Auto-Correlation: trace_id &amp; span_id</text>
+  <text x="982" y="496" fill="#fed7aa" font-family="sans-serif" font-size="8" text-anchor="middle">Allows instant log filtering matching exact active trace span</text>
+
+  <!-- Connectors from Collector to 3 Pillars -->
+  <line x1="212" y1="335" x2="212" y2="358" stroke="#34d399" stroke-width="2" marker-end="url(#obArGreen)"/>
+  <line x1="595" y1="335" x2="595" y2="358" stroke="#38bdf8" stroke-width="2" marker-end="url(#obArBlue)"/>
+  <line x1="982" y1="335" x2="982" y2="358" stroke="#fb923c" stroke-width="2" marker-end="url(#obArOrange)"/>
+
+  <!-- LAYER 4: Unified Grafana Dashboard & Cross-Pillar Correlation Flow (Bottom) -->
+  <rect x="35" y="535" width="1130" height="120" rx="8" fill="#18182f" stroke="#c084fc" stroke-width="1.5" filter="url(#shadow5)"/>
+  <rect x="35" y="535" width="1130" height="26" rx="8" fill="#581c87"/>
+  <text x="600" y="553" fill="#f3e8ff" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Unified Observability Operations Console (Grafana Enterprise + Incident Correlation Workflow)</text>
+
+  <!-- Step 1: Metric Spike -->
+  <rect x="50" y="570" width="220" height="70" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1.2"/>
+  <text x="160" y="590" fill="#34d399" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Step 1: Metric Spike Alert</text>
+  <text x="60" y="608" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; P99 Latency reaches 52ms</text>
+  <text x="60" y="622" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Alertmanager fires P1 alert</text>
+
+  <!-- Arrow Step 1 -> 2 -->
+  <line x1="270" y1="605" x2="310" y2="605" stroke="#c084fc" stroke-width="2" marker-end="url(#obArPurple)"/>
+
+  <!-- Step 2: Exemplar Click -->
+  <rect x="320" y="570" width="240" height="70" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1.2"/>
+  <text x="440" y="590" fill="#c084fc" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Step 2: Exemplar Drilldown</text>
+  <text x="330" y="608" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Operator clicks outlier point on graph</text>
+  <text x="330" y="622" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Extracts exact trace_id: a81f4c...</text>
+
+  <!-- Arrow Step 2 -> 3 -->
+  <line x1="560" y1="605" x2="600" y2="605" stroke="#c084fc" stroke-width="2" marker-end="url(#obArPurple)"/>
+
+  <!-- Step 3: Tempo Trace Waterfall -->
+  <rect x="610" y="570" width="250" height="70" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+  <text x="735" y="590" fill="#38bdf8" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Step 3: Tempo Trace Waterfall</text>
+  <text x="620" y="608" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Visualizes span timing across all hops</text>
+  <text x="620" y="622" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Identifies 34ms hang in Triton inference</text>
+
+  <!-- Arrow Step 3 -> 4 -->
+  <line x1="860" y1="605" x2="900" y2="605" stroke="#c084fc" stroke-width="2" marker-end="url(#obArPurple)"/>
+
+  <!-- Step 4: Contextual Logs & Remediation -->
+  <rect x="910" y="570" width="240" height="70" rx="6" fill="#1e293b" stroke="#fb923c" stroke-width="1.2"/>
+  <text x="1030" y="590" fill="#fb923c" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Step 4: Filtered Loki Logs</text>
+  <text x="920" y="608" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; 1-Click: "Logs for this Span"</text>
+  <text x="920" y="622" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Root Cause: GPU CUDA worker lock</text>
+
+</svg>
+    </div>
+    <div class="diagram-caption">
+      <strong>Figure 5: Enterprise Observability &amp; Telemetry Correlation Architecture</strong> &mdash; Unified OpenTelemetry pipeline, Prometheus Golden Signals metrics, Tempo distributed tracing, Loki structured logging, and Prometheus Exemplar cross-linking.
+    </div>
+  </div>
+
+  <div class="diagram-wrapper page-break-before">
+    <div class="diagram-container">
+      <svg viewBox="0 0 1200 680" width="100%" height="680" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <filter id="shadow6" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <marker id="cpArPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#c084fc"/>
+    </marker>
+    <marker id="cpArBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="cpArGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="680" fill="url(#bgGrad6)" rx="12" />
+  <rect x="15" y="15" width="1170" height="650" fill="none" stroke="#334155" stroke-width="1.5" rx="10" />
+
+  <!-- Title -->
+  <text x="35" y="48" fill="#f8fafc" font-family="'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700">Figure 6: Compliance Audit, Immutable Storage &amp; Historical Replay Subsystem</text>
+  <text x="35" y="70" fill="#94a3b8" font-family="'Segoe UI', Roboto, sans-serif" font-size="12">WORM S3 Storage (7-Yr Retention), Apache Iceberg Partitioning, Isolated Replay Pipeline &amp; Shadow Scoring</text>
+
+  <!-- SECTION 1: Continuous Audit Ingestion & Compaction (Left Half) -->
+  <rect x="35" y="95" width="530" height="550" rx="8" fill="#1e1b4b" stroke="#a855f7" stroke-width="1.5" filter="url(#shadow6)"/>
+  <rect x="35" y="95" width="530" height="32" rx="8" fill="#6b21a8"/>
+  <text x="300" y="116" fill="#faf5ff" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Continuous Ingestion &amp; Immutable Archival Pipeline</text>
+
+  <!-- Live Topics Feed -->
+  <rect x="50" y="145" width="500" height="75" rx="6" fill="#0f172a" stroke="#fb923c" stroke-width="1.2"/>
+  <text x="300" y="167" fill="#fb923c" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Live Production Kafka Topics</text>
+  <text x="60" y="187" fill="#cbd5e1" font-family="monospace" font-size="8.5">&#8226; trans.received.v1  &#8226; trans.enriched.v1  &#8226; fraud.evaluated.v1  &#8226; case.updated.v1</text>
+  <text x="60" y="205" fill="#94a3b8" font-family="sans-serif" font-size="8.5">High-throughput ingestion stream: 1,000 TPS | Peak: 86.4M events/day</text>
+
+  <!-- Kafka Connect / Stream Compactor -->
+  <rect x="50" y="245" width="500" height="95" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1.2"/>
+  <text x="300" y="267" fill="#c084fc" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Audit Archiver &amp; Compaction Engine (KEDA Autoscaled)</text>
+  <text x="65" y="288" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Buffers incoming event streams into 60-second micro-batches</text>
+  <text x="65" y="303" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Serializes into Apache Parquet with Zstandard (ZSTD) compression (6:1 ratio)</text>
+  <text x="65" y="318" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Generates cryptographic SHA-256 batch manifest &amp; digital signature</text>
+  <text x="65" y="333" fill="#34d399" font-family="monospace" font-size="8">SLO: Persisted to WORM storage in &lt; 15 seconds from generation</text>
+
+  <!-- Connect Archiver down to Storage -->
+  <line x1="300" y1="220" x2="300" y2="243" stroke="#c084fc" stroke-width="2" marker-end="url(#cpArPurple)"/>
+
+  <!-- Immutable Storage (S3 Object Lock) -->
+  <rect x="50" y="365" width="500" height="150" rx="6" fill="#2e1065" stroke="#d8b4fe" stroke-width="1.5"/>
+  <text x="300" y="388" fill="#f5d0fe" font-family="sans-serif" font-size="11.5" font-weight="700" text-anchor="middle">WORM Compliance Storage (AWS S3 Glacier Instant Retrieval / GCS)</text>
+  <text x="300" y="405" fill="#e879f9" font-family="sans-serif" font-size="9" text-anchor="middle">Object Lock in Compliance Mode (Cannot be deleted or overwritten by ANY IAM user for 7 Years)</text>
+  <line x1="65" y1="413" x2="535" y2="413" stroke="#701a75" stroke-width="1"/>
+  <text x="65" y="430" fill="#fdf4ff" font-family="monospace" font-size="8.5">Partition Scheme: s3://bank-audit-lakehouse/iceberg/</text>
+  <text x="85" y="445" fill="#fdf4ff" font-family="monospace" font-size="8">&#8226; table=transactions/year=YYYY/month=MM/day=DD/hour=HH/*.parquet</text>
+  <text x="85" y="460" fill="#fdf4ff" font-family="monospace" font-size="8">&#8226; table=evaluations/year=YYYY/month=MM/day=DD/hour=HH/*.parquet</text>
+  <text x="85" y="475" fill="#fdf4ff" font-family="monospace" font-size="8">&#8226; table=case_audit/year=YYYY/month=MM/day=DD/hour=HH/*.parquet</text>
+  <text x="65" y="495" fill="#a7f3d0" font-family="sans-serif" font-size="8.5">&#8226; BCBS 239 &amp; SEC Rule 17a-4 compliant write-once-read-many guarantees</text>
+
+  <!-- Connect Compactor to S3 -->
+  <line x1="300" y1="340" x2="300" y2="363" stroke="#d8b4fe" stroke-width="2" marker-end="url(#cpArPurple)"/>
+
+  <!-- Hourly Checksum Verification -->
+  <rect x="50" y="535" width="500" height="50" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+  <text x="300" y="555" fill="#34d399" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Automated Reconciliation &amp; Parity Engine</text>
+  <text x="300" y="572" fill="#cbd5e1" font-family="sans-serif" font-size="8" text-anchor="middle">Verifies (Kafka Ingested Total - S3 Archived Total == 0) every 60 mins. Raises P1 alert on mismatch.</text>
+
+  <!-- SECTION 2: Deterministic Historical Replay Subsystem (Right Half) -->
+  <rect x="620" y="95" width="545" height="550" rx="8" fill="#0c1e33" stroke="#0284c7" stroke-width="1.5" filter="url(#shadow6)"/>
+  <rect x="620" y="95" width="545" height="32" rx="8" fill="#075985"/>
+  <text x="892" y="116" fill="#e0f2fe" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Deterministic Historical Replay &amp; Shadow Validation Subsystem</text>
+
+  <!-- Replay Request Trigger -->
+  <rect x="640" y="145" width="505" height="75" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+  <text x="892" y="167" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Replay Coordinator &amp; Compliance API</text>
+  <text x="655" y="187" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Admin API for Compliance Officers, Internal Auditors &amp; ML Engineers</text>
+  <text x="655" y="203" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Trigger Input: Date Range [T1, T2], Tenant ID, Target Model Version, Replay Speed (1x to 100x)</text>
+
+  <!-- S3 to Replay Coordinator Connector -->
+  <path d="M 550 440 L 590 440 L 590 182 L 638 182" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="3,3" marker-end="url(#cpArBlue)"/>
+  <text x="590" y="290" fill="#38bdf8" font-family="sans-serif" font-size="8" text-anchor="middle" transform="rotate(-90 590 290)">Read Historical Parquet</text>
+
+  <!-- Replay Worker Fleet -->
+  <rect x="640" y="245" width="505" height="95" rx="6" fill="#1e293b" stroke="#34d399" stroke-width="1.2"/>
+  <text x="892" y="267" fill="#34d399" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Replay Worker Fleet (KEDA Scaled on Demand)</text>
+  <text x="655" y="288" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Fetches columnar partition slices from Iceberg lakehouse using Apache Arrow</text>
+  <text x="655" y="303" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Injects original event packets into ISOLATED Kafka topic: trans.replay.v1</text>
+  <text x="655" y="318" fill="#cbd5e1" font-family="sans-serif" font-size="8.5">&#8226; Preserves original event timestamps in headers (`x-original-timestamp`)</text>
+  <text x="655" y="333" fill="#34d399" font-family="monospace" font-size="8">Zero Impact on Live Production Traffic or Analyst Queues</text>
+
+  <line x1="892" y1="220" x2="892" y2="243" stroke="#34d399" stroke-width="2" marker-end="url(#cpArGreen)"/>
+
+  <!-- Shadow Scoring Pipeline -->
+  <rect x="640" y="365" width="505" height="150" rx="6" fill="#1e293b" stroke="#f87171" stroke-width="1.2"/>
+  <text x="892" y="388" fill="#f87171" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Shadow Scoring Engine &amp; Candidate Model Sandbox</text>
+  <rect x="655" y="402" width="230" height="65" rx="4" fill="#0f172a" stroke="#ef4444" stroke-width="1"/>
+  <text x="770" y="420" fill="#fca5a5" font-family="sans-serif" font-size="9" font-weight="700" text-anchor="middle">Isolated Topic: trans.replay.v1</text>
+  <text x="665" y="436" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Partitioned by account_id</text>
+  <text x="665" y="450" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Dedicated replay consumer group</text>
+
+  <rect x="900" y="402" width="230" height="65" rx="4" fill="#0f172a" stroke="#f87171" stroke-width="1"/>
+  <text x="1015" y="420" fill="#f87171" font-family="sans-serif" font-size="9" font-weight="700" text-anchor="middle">Candidate ML Model (v2.4)</text>
+  <text x="910" y="436" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Scores replayed transactions</text>
+  <text x="910" y="450" fill="#cbd5e1" font-family="sans-serif" font-size="8">&#8226; Computes shadow precision/recall</text>
+
+  <text x="892" y="490" fill="#cbd5e1" font-family="sans-serif" font-size="8.5" text-anchor="middle">Enables risk backtesting against real historical fraud spikes (Black Friday, Tax Year End)</text>
+  <text x="892" y="505" fill="#fca5a5" font-family="monospace" font-size="8" text-anchor="middle">No alerts sent to Core Banking or Live Analysts during Replay</text>
+
+  <line x1="892" y1="340" x2="892" y2="363" stroke="#f87171" stroke-width="2" marker-end="url(#cpArPurple)"/>
+
+  <!-- Model Performance Comparison & Diff Report -->
+  <rect x="640" y="535" width="505" height="50" rx="4" fill="#0f172a" stroke="#c084fc" stroke-width="1"/>
+  <text x="892" y="555" fill="#c084fc" font-family="sans-serif" font-size="9.5" font-weight="700" text-anchor="middle">Model Governance &amp; Audit Diff Report Generator</text>
+  <text x="892" y="572" fill="#cbd5e1" font-family="sans-serif" font-size="8" text-anchor="middle">Compares original production decisions with candidate decisions. Computes false positive reduction.</text>
+
+</svg>
+    </div>
+    <div class="diagram-caption">
+      <strong>Figure 6: Compliance Audit, Immutable Storage &amp; Historical Replay Subsystem</strong> &mdash; Continuous S3 Object Lock WORM ingestion (7-year retention), Apache Iceberg lakehouse compaction, and isolated deterministic replay pipeline for model backtesting.
+    </div>
+  </div>
+</section>
+
+
+<section id="section-12" class="report-section page-break-before">
+  <div class="section-header">
+    <span class="section-number">12</span>
+    <div class="section-title-wrap">
+      <h2>Implementation Roadmap, Migration Strategy &amp; Conclusion</h2>
+      <p class="section-subtitle">Strangler Fig migration roadmap, executive impact summary, and enterprise architectural governance sign-off.</p>
+    </div>
+  </div>
+
+  <h3>12.1 Phased Migration Roadmap (32-Week Strangler Fig Pattern)</h3>
+  <div class="card-grid">
+    <div class="info-card">
+      <div class="card-title">Phase 1: Dual-Write Ingress (Wks 1-8)</div>
+      <p>Deploy Go Ingestion Gateway and Kafka backbone. Establish dual-write from payment networks; validate 1,000 TPS throughput and continuous S3 WORM compliance archiving.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">Phase 2: Shadow Scoring (Wks 9-16)</div>
+      <p>Operationalize Flink feature streaming and Redis. Run Triton ML inference in shadow mode, validating &gt;30% false positive reduction against legacy batch reports.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">Phase 3: Analyst Console Pilot (Wks 17-24)</div>
+      <p>Launch Analyst BFF and virtualized React UI to 10% of senior investigators. Calibrate alert thresholds and validate TreeSHAP explainability accuracy.</p>
+    </div>
+    <div class="info-card">
+      <div class="card-title">Phase 4: Full Cutover (Wks 25-32)</div>
+      <p>Activate automated enforcement actions (card freeze / holds). Cut over 100% of traffic, run 30 days of parallel reconciliation, and decommission legacy batch servers.</p>
+    </div>
+  </div>
+
+  <h3>12.2 Executive Architectural Sign-Off Block</h3>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Governance Role</th>
+          <th style="width: 25%;">Representative Name</th>
+          <th style="width: 30%;">Approval Status</th>
+          <th style="width: 20%;">Date Ratified</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Principal Solutions Architect</strong></td>
+          <td>Dr. A. Vance, Ph.D.</td>
+          <td><span class="badge badge-success">Approved &amp; Committed</span></td>
+          <td>2026-11-03</td>
+        </tr>
+        <tr>
+          <td><strong>Chief Risk Officer (CRO)</strong></td>
+          <td>E. Sterling, CFA</td>
+          <td><span class="badge badge-success">Approved &amp; Signed-Off</span></td>
+          <td>2026-11-03</td>
+        </tr>
+        <tr>
+          <td><strong>Chief Information Security Officer</strong></td>
+          <td>M. Chen, CISSP</td>
+          <td><span class="badge badge-primary">Security Baseline Certified</span></td>
+          <td>2026-11-03</td>
+        </tr>
+        <tr>
+          <td><strong>Head of Enterprise Architecture</strong></td>
+          <td>R. Thornton, TOGAF</td>
+          <td><span class="badge badge-success">Architecture Board Ratified</span></td>
+          <td>2026-11-03</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+  </div>
+</body>
+</html>
