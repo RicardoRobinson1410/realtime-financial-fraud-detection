@@ -21,6 +21,32 @@ Enterprise Solution Architecture for the real-time financial fraud detection mod
 
 ## 🚀 Key Architectural Highlights
 
+```mermaid
+flowchart TD
+    subgraph Ingress["Ingress Boundary & Zero-Trust Mesh"]
+        TX["Transaction Stream\n(POS / Web / FedNow / Instant)"] --> APIGW["Envoy API Gateway\nmTLS 1.3 + PAN Tokenization"]
+    end
+
+    subgraph FastPath["Synchronous Fast-Path (P99 <= 45ms)"]
+        APIGW -->|gRPC < 35ms| SC["Fraud Scoring Engine\n(Go / C++ / Triton Inference)"]
+        SC -->|Pre-Auth Decision| DEC{"Risk Score"}
+        DEC -->|Score < Threshold| APPROVE["APPROVE"]
+        DEC -->|Score >= Threshold| BLOCK["DECLINE / STEP-UP"]
+    end
+
+    subgraph EventStream["Asynchronous Event Fabric"]
+        APIGW -->|Full Event Log| KAFKA["Apache Kafka Cluster\n(Compacted & Partitioned)"]
+        KAFKA -->|Consumer Lag Metrics| KEDA["KEDA Autoscaler\n(Horizontal Pod Autoscaler)"]
+        KEDA -.-> SC
+        KAFKA --> WORKER["Graph Feature Workers\n(Neo4j + PySpark Stream)"]
+    end
+
+    subgraph Governance["Regulatory WORM Replayability"]
+        KAFKA --> WORM["S3 Object Lock / WORM Storage\n(BCBS 239 7-Year Deterministic Audit)"]
+        WORKER --> WORM
+    end
+```
+
 | Dimension | Architectural Specification |
 |---|---|
 | **Sustained Throughput** | **1,000 TPS baseline sustained** with burst headroom up to 3,000 TPS |
